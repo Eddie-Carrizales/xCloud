@@ -303,18 +303,29 @@
                                             <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gXx-Bf-ukD">
-                                                    <rect key="frame" x="15" y="0.0" width="96" height="99"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gXx-Bf-ukD">
+                                                    <rect key="frame" x="15" y="0.0" width="98" height="99"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nH2-fQ-ALQ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nH2-fQ-ALQ">
                                                     <rect key="frame" x="15" y="107" width="96" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="gXx-Bf-ukD" secondAttribute="trailing" constant="15" id="0SI-SC-YOl"/>
+                                                <constraint firstItem="gXx-Bf-ukD" firstAttribute="leading" secondItem="vkQ-hb-7J7" secondAttribute="leading" constant="15" id="2nl-xV-1zY"/>
+                                                <constraint firstItem="nH2-fQ-ALQ" firstAttribute="top" secondItem="gXx-Bf-ukD" secondAttribute="bottom" constant="8" symbolic="YES" id="6sV-NW-ZQC"/>
+                                                <constraint firstAttribute="bottom" secondItem="nH2-fQ-ALQ" secondAttribute="bottom" id="DHc-M0-mLq"/>
+                                                <constraint firstAttribute="trailing" secondItem="nH2-fQ-ALQ" secondAttribute="trailing" constant="15" id="EwM-UV-WGb"/>
+                                                <constraint firstAttribute="trailing" secondItem="nH2-fQ-ALQ" secondAttribute="trailing" constant="15" id="F5b-h6-Umd"/>
+                                                <constraint firstItem="nH2-fQ-ALQ" firstAttribute="leading" secondItem="vkQ-hb-7J7" secondAttribute="leading" constant="15" id="FLl-KI-VVY"/>
+                                                <constraint firstItem="nH2-fQ-ALQ" firstAttribute="top" secondItem="gXx-Bf-ukD" secondAttribute="bottom" constant="8" symbolic="YES" id="Krl-Fn-H6e"/>
+                                                <constraint firstAttribute="bottom" secondItem="nH2-fQ-ALQ" secondAttribute="bottom" id="Q2S-Zq-Wcd"/>
+                                                <constraint firstItem="nH2-fQ-ALQ" firstAttribute="leading" secondItem="vkQ-hb-7J7" secondAttribute="leading" constant="15" id="VuE-XJ-2Zc"/>
+                                                <constraint firstItem="gXx-Bf-ukD" firstAttribute="top" secondItem="vkQ-hb-7J7" secondAttribute="top" id="oCZ-jk-KQQ"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
                                             <outlet property="imageViewCell" destination="gXx-Bf-ukD" id="pBa-Ce-Sev"/>

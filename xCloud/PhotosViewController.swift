@@ -23,12 +23,23 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     var imageList = [String]()
     
     //List of type ImageData that will store the image and its name (so we can show them together on the each cell)
-    var photosAndNamesList = [ImageData]()
+    var photosDataList = [ImageData]()
     
     // An array to store retrieved image URLs
     var retrievedImageURLs: [String] = []
     
+    // An array to store retrieved images
+    var retrievedImages: [UIImage] = []
+    
+    //Searching variables
     let searchController = UISearchController(searchResultsController: nil)
+    var searching = false
+    var searchedImage = [ImageData]()
+    
+    var imageNumber = 0
+    var urlString = ""
+
+    
     
     //----------------------- View Did Load -----------------------
     override func viewDidLoad()
@@ -39,25 +50,26 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         navigationItem.searchController = searchController
         
         //Uses the url to download the each image and sets the imageViewCell to that image
-        guard let urlString = UserDefaults.standard.value(forKey: "url") as? String,
-              let url = URL(string:urlString) else
-        {
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url, completionHandler: {data, _, error in
-            guard let data = data, error == nil else
-            {
-                return
-            }
-            DispatchQueue.main.async
-            {
-                //Shows the image on the image view screen and updates image in real time
-                let image = UIImage(data: data)
-                //imageViewCell.image = image
-            }
-        })
-        task.resume()
+//        guard let urlString = UserDefaults.standard.value(forKey: "url") as? String,
+//              let url = URL(string:urlString) else
+//        {
+//            return
+//        }
+//
+//        let task = URLSession.shared.dataTask(with: url, completionHandler: {data, _, error in
+//            guard let data = data, error == nil else
+//            {
+//                return
+//            }
+//            DispatchQueue.main.async
+//            {
+//                //Shows the image on the image view screen and updates image in real time
+//                let image = UIImage(data: data)
+//                imageViewCell.image = image
+//            }
+//        })
+//        task.resume()
+        photosCollectionView.reloadData()
     }
     
     //----------------------- Action Functions -----------------------
@@ -71,6 +83,20 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     //----------------------- Other Functions -----------------------
+    func configureSearchController()
+    {
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        searchController.searchBar.placeholder = "Search content in photos or by name"
+    }
+    
     //Function that will call the imagePickerController allowing a user to pick an image
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
     {
@@ -81,13 +107,13 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
             return
         }
         //creates variable imageData and sets its type
-        guard let imageData = image.pngData() else
+        guard let imageAsData = image.pngData() else
         {
             return
         }
 
         
-        //------------------We retrieve the list of images from the database here----------
+        //------------------We retrieve the String list of images from the database here----------
         //Retrieve list of image strings from the database
         
         // Reference to the file in Firebase Storage
@@ -109,16 +135,13 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                 {
                     // Split the retrieved string into an array of strings
                     self.imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
-                    print("Retrieved strings: \(self.imageList)")
+                    print("Retrieved Image Names from Database: \(self.imageList)")
                 }
             }
         }
         
         
         //--------------Parsing List so we know what is current image number and setting image name-------
-        //local variable declarations
-        var imageNumber = 0
-        
         //gets the number from the last image in the imageList
         if let lastImage = imageList.last
         {
@@ -137,14 +160,16 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
             }
         }
 
-        var imageName = "IMAGE_" + String(imageNumber) + ".png"
+        let imageName = "IMAGE_" + String(imageNumber) + ".png"
+        print("Current Photo Name: " + imageName)
         imageList.append(imageName)
         
+        //------------------------------------------------------------------------------
         //everytime you upload an image you add it to the list and upload list as well, every time you remove an image, you remove it from the list and upload it as well
         //------------------------------------------------------------------------------
         
         //------Putting the image chosen from the imagePickerController into the storage address-----
-        storage.child("images/" + imageName).putData(imageData, metadata: nil , completion:
+        storage.child("images/" + imageName).putData(imageAsData, metadata: nil , completion:
         { _, error in
             guard error == nil else
             {
@@ -152,44 +177,69 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                 return
             }
             
-            //------------------Retrieve all of the images in the Database-----------------
+            //------------------Retrieve urls and images-----------------
             for imageName in self.imageList
             {
-                let imageRef = self.storage.child("images/\(imageName)")
-
-                    // Fetch download URL for each image
+                let imageRef = self.storage.child("images/" + imageName) //name of the image we will retrieve
+                
+                
+                    // ------------------Fetch download URL for each image------------------
                     imageRef.downloadURL { url, error in
                         if let error = error {
                             print("Error fetching URL for \(imageName): \(error.localizedDescription)")
                         }
                         else if let url = url
                         {
+                            
+                            self.urlString = url.absoluteString
+                            
                             // Append retrieved download URL to the array
-                            let urlString = url.absoluteString //This may not be needed I just added it
-                            self.retrievedImageURLs.append(url.absoluteString)
+                            self.retrievedImageURLs.append(self.urlString)
                             
                             // Check if all image URLs are retrieved
                             if self.retrievedImageURLs.count == self.imageList.count
                             {
                                 // All image URLs are retrieved, do something with retrievedImageURLs array
-                                print("All image URLs retrieved: \(self.retrievedImageURLs)")
-                                
                                 // Now you have an array of image URLs to work with
                                 // You can use these URLs to load images asynchronously
-                                DispatchQueue.main.async
-                                {
-                                    //self.imageView.image = image
-                                    let currentImage = ImageData(fImage: image, fName: imageName)
-                                    self.photosAndNamesList.append(currentImage)
-                                }
-                                
-                                //Save a url to a users device (we have to save the whole list)
-                                //UserDefaults.standard.set(urlString, forKey: "url")
+                                print("All image URLs retrieved: \(self.retrievedImageURLs)")
                             }
                         }
                     } //end of downloadURL
                 
-                } // end of for loop
+                    // ------------------ Download image data ------------------
+                    imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                        if let error = error {
+                            print("Error downloading \(imageName): \(error.localizedDescription)")
+                        }
+                        else
+                        {
+                            if let imageData = data, let image = UIImage(data: imageData)
+                            {
+                                
+                                // Append retrieved image to the array
+                                self.retrievedImages.append(image)
+                            
+                                // Check if all images are retrieved
+                                if self.retrievedImages.count == self.imageList.count
+                                {
+                                    // All images are retrieved, do something with retrievedImages array
+                                    print("All images retrieved: \(self.retrievedImages)")
+                                
+                                }
+                                
+                                //--------------Append Image, Name, and URL retrieved-----------
+                                //self.imageView.image = image
+                                var currentImage = ImageData(fImage: image, fName: imageName, fURL: self.urlString)
+                                self.photosDataList.append(currentImage)
+                                self.photosCollectionView.reloadData()
+                                
+                            }
+                        }
+                    } // end of download image data
+                    
+                
+            } // end of for loop
         }) // end of storage.child
         
         
@@ -225,5 +275,63 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     
 } // end of class
-
+extension PhotosViewController: UICollectionViewDelegate, UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate
+{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if searching {
+            return searchedImage.count
+        }
+        else {
+            return photosDataList.count
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = photosCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PhotosCollectionViewCell
+        
+        if searching
+        {
+            cell.imageViewCell.image = searchedImage[indexPath.row].photoImage
+            cell.labelCell.text = searchedImage[indexPath.row].photoName
+        }
+        else
+        {
+            cell.imageViewCell.image = photosDataList[indexPath.row].photoImage
+            cell.labelCell.text = photosDataList[indexPath.row].photoName
+        }
+        
+        return cell
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text!
+        
+        if !searchText.isEmpty
+        {
+            searching = true
+            searchedImage.removeAll()
+            
+            for photo in photosDataList
+            {
+                if photo.photoName.lowercased().contains(searchText.lowercased())
+                {
+                    searchedImage.append(photo)
+                }
+            }
+        }
+        else
+        {
+            searching = false
+            searchedImage.removeAll()
+            searchedImage = photosDataList
+        }
+        photosCollectionView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searching = false
+        searchedImage.removeAll()
+        photosCollectionView.reloadData()
+    }
+}
 
