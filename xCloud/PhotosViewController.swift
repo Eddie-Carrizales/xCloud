@@ -11,14 +11,9 @@ import FirebaseStorage
 
 class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
-    //List that will store the image names, to determine what we have in the database
-    var imageList = [String]()
     
+    @IBOutlet weak var photosCollectionView: UICollectionView!
     
-    @IBOutlet weak var imageView: UIImageView!
-    
-    //Firebase Storage
-    private let storage = Storage.storage().reference()
     
     let searchController = UISearchController()
     override func viewDidLoad()
@@ -72,10 +67,58 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         {
             return
         }
+
         
-        //------------------We could retrieve the list of images from the databse here----------
-        //Retrieve list of files from the database
-        let imageNumber = imageList.count
+        //------------------We retrieve the list of images from the database here----------
+        //Retrieve list of image strings from the database
+        
+        // Reference to the file in Firebase Storage
+        let imageListRef = storage.child("index/imageList.txt")
+
+        // Download the imageList file
+        imageListRef.getData(maxSize: 1 * 1024 * 1024)
+        { data, error in
+            if let error = error
+            {
+                print("Error downloading: \(error.localizedDescription)")
+                return
+            }
+
+            if let data = data
+            {
+                // Convert the Data to a String
+                if let fileContents = String(data: data, encoding: .utf8)
+                {
+                    // Split the retrieved string into an array of strings
+                    self.imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
+                    print("Retrieved strings: \(self.imageList)")
+                }
+            }
+        }
+        
+        
+        //--------------Parsing List so we know what is current image number and setting image name-------
+        //local variable declarations
+        var imageNumber = 0
+        
+        //gets the number from the last image in the imageList
+        if let lastImage = imageList.last
+        {
+            // Find the range of the underscore character
+            if let range = lastImage.range(of: "_")
+            {
+                // Extract substring after the underscore
+                let digitsAfterUnderscore = lastImage[range.upperBound...]
+                
+                // Convert the substring to an integer
+                imageNumber = Int(digitsAfterUnderscore)!
+                print("Current image number: \(imageNumber)")
+                
+                //Add 1 to whatever number is latest
+                imageNumber = imageNumber + 1
+            }
+        }
+
         var imageName = "IMAGE_" + String(imageNumber) + ".png"
         imageList.append(imageName)
         
@@ -91,7 +134,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                 return
             }
             
-            //Fetch the image called images/IMAGE_1.png from the download URL
+            //Fetch the image called images/IMAGE_1.png from the download URL (basically you get the download url of the image then you download it)
             // NOTE: Currently, this only will retrieve one file, you have to make a loop that will go through all of the names in the imageList and retrieve every single image and put it in a special list that will store images, then you will pass that list to your collection controller so it can show all those images that you have in your database.
             self.storage.child("images/file.png").downloadURL(completion:
             {url, error in
@@ -113,12 +156,30 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
             })
         })
         
-        //upload image data
         
-        //get download url
+        //----------------We store the imageList in the database as a .txt file---------------
+        // Convert the array of strings to a single string representation
+        let combinedImageNameStrings = imageList.joined(separator: "\n")
+
+        // Convert the string to Data
+        if let data = combinedImageNameStrings.data(using: .utf8) {
+            // Create a reference to a file in Firebase Storage within the "index" folder
+            let imageListRef = storage.child("index/imageList.txt")
+
+            // Upload the data to Firebase Storage
+            imageListRef.putData(data, metadata: nil) { (metadata, error) in
+                guard let metadata = metadata else {
+                    print("Error uploading: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                print("File uploaded successfully! Metadata: \(metadata)")
+            }
+        }
+        //--------------------------------------------------------------------------------------
         
-        //save download url to userdata
-    }
+        
+        
+    } // end of function pickerController
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E83CF3E12B20130800D3E486 /* PhotosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83CF3E02B20130800D3E486 /* PhotosCollectionViewCell.swift */; };
+		E83CF3E32B20165800D3E486 /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83CF3E22B20165800D3E486 /* ImageData.swift */; };
 		E8DC9A022AEA1728002BFDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A012AEA1728002BFDC5 /* AppDelegate.swift */; };
 		E8DC9A042AEA1728002BFDC5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A032AEA1728002BFDC5 /* SceneDelegate.swift */; };
 		E8DC9A092AEA1728002BFDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8DC9A072AEA1728002BFDC5 /* Main.storyboard */; };
@@ -20,10 +22,11 @@
 		E8DC9A212AEA3028002BFDC5 /* MyDriveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A202AEA3028002BFDC5 /* MyDriveController.swift */; };
 		E8DC9A252AEA3567002BFDC5 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */; };
 		E8DC9A412AEA442E002BFDC5 /* RootTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A402AEA442E002BFDC5 /* RootTableViewController.swift */; };
-		E8DC9A472AEB8252002BFDC5 /* PhotosCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A462AEB8252002BFDC5 /* PhotosCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E83CF3E02B20130800D3E486 /* PhotosCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewCell.swift; sourceTree = "<group>"; };
+		E83CF3E22B20165800D3E486 /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		E8DC99FE2AEA1728002BFDC5 /* xCloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = xCloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8DC9A012AEA1728002BFDC5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E8DC9A032AEA1728002BFDC5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,7 +38,6 @@
 		E8DC9A202AEA3028002BFDC5 /* MyDriveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDriveController.swift; sourceTree = "<group>"; };
 		E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		E8DC9A402AEA442E002BFDC5 /* RootTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTableViewController.swift; sourceTree = "<group>"; };
-		E8DC9A462AEB8252002BFDC5 /* PhotosCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +79,8 @@
 				E8DC9A402AEA442E002BFDC5 /* RootTableViewController.swift */,
 				E8DC9A202AEA3028002BFDC5 /* MyDriveController.swift */,
 				E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */,
-				E8DC9A462AEB8252002BFDC5 /* PhotosCollectionViewController.swift */,
+				E83CF3E02B20130800D3E486 /* PhotosCollectionViewCell.swift */,
+				E83CF3E22B20165800D3E486 /* ImageData.swift */,
 				E8DC9A072AEA1728002BFDC5 /* Main.storyboard */,
 				E8DC9A0A2AEA1729002BFDC5 /* Assets.xcassets */,
 				E8DC9A0C2AEA1729002BFDC5 /* LaunchScreen.storyboard */,
@@ -171,9 +174,10 @@
 				E8DC9A022AEA1728002BFDC5 /* AppDelegate.swift in Sources */,
 				E8DC9A412AEA442E002BFDC5 /* RootTableViewController.swift in Sources */,
 				E8DC9A212AEA3028002BFDC5 /* MyDriveController.swift in Sources */,
-				E8DC9A472AEB8252002BFDC5 /* PhotosCollectionViewController.swift in Sources */,
 				E8DC9A042AEA1728002BFDC5 /* SceneDelegate.swift in Sources */,
 				E8DC9A252AEA3567002BFDC5 /* PhotosViewController.swift in Sources */,
+				E83CF3E12B20130800D3E486 /* PhotosCollectionViewCell.swift in Sources */,
+				E83CF3E32B20165800D3E486 /* ImageData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
