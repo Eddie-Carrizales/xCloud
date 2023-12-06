@@ -6,16 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
-class ImageData
-{
-    var photoImage: String
+class ImageData {
+    var photoImage: UIImage
     var photoName: String
     
-    init(fImage: String, fName: String)
-    {
+    init(fImage: UIImage, fName: String) {
         photoImage = fImage
         photoName = fName
     }
-    
 }

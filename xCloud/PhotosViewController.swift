@@ -9,13 +9,28 @@ import UIKit
 import FirebaseStorage
 
 
-class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate
-{
+class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    //-----------------------Connected Outlets-----------------------
     @IBOutlet weak var photosCollectionView: UICollectionView!
     
     
-    let searchController = UISearchController()
+    //-----------------------Global Variables-----------------------
+    //Firebase Storage
+    private let storage = Storage.storage().reference()
+    
+    //List that will store the image names, to determine what we have in the database
+    var imageList = [String]()
+    
+    //List of type ImageData that will store the image and its name (so we can show them together on the each cell)
+    var photosAndNamesList = [ImageData]()
+    
+    // An array to store retrieved image URLs
+    var retrievedImageURLs: [String] = []
+    
+    let searchController = UISearchController(searchResultsController: nil)
+    
+    //----------------------- View Did Load -----------------------
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -23,6 +38,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
         
+        //Uses the url to download the each image and sets the imageViewCell to that image
         guard let urlString = UserDefaults.standard.value(forKey: "url") as? String,
               let url = URL(string:urlString) else
         {
@@ -38,12 +54,13 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
             {
                 //Shows the image on the image view screen and updates image in real time
                 let image = UIImage(data: data)
-                self.imageView.image = image
+                //imageViewCell.image = image
             }
         })
         task.resume()
     }
     
+    //----------------------- Action Functions -----------------------
     @IBAction func didTapUpload(_ sender: UIButton)
     {
         let picker = UIImagePickerController()
@@ -53,6 +70,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         present(picker, animated: true)
     }
     
+    //----------------------- Other Functions -----------------------
     //Function that will call the imagePickerController allowing a user to pick an image
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
     {
@@ -125,7 +143,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         //everytime you upload an image you add it to the list and upload list as well, every time you remove an image, you remove it from the list and upload it as well
         //------------------------------------------------------------------------------
         
-        //Putting the image chosen from the imagePickerController into the storage address
+        //------Putting the image chosen from the imagePickerController into the storage address-----
         storage.child("images/" + imageName).putData(imageData, metadata: nil , completion:
         { _, error in
             guard error == nil else
@@ -134,27 +152,45 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                 return
             }
             
-            //Fetch the image called images/IMAGE_1.png from the download URL (basically you get the download url of the image then you download it)
-            // NOTE: Currently, this only will retrieve one file, you have to make a loop that will go through all of the names in the imageList and retrieve every single image and put it in a special list that will store images, then you will pass that list to your collection controller so it can show all those images that you have in your database.
-            self.storage.child("images/file.png").downloadURL(completion:
-            {url, error in
-                guard let url = url, error == nil else
-                {
-                    return
-                }
+            //------------------Retrieve all of the images in the Database-----------------
+            for imageName in self.imageList
+            {
+                let imageRef = self.storage.child("images/\(imageName)")
+
+                    // Fetch download URL for each image
+                    imageRef.downloadURL { url, error in
+                        if let error = error {
+                            print("Error fetching URL for \(imageName): \(error.localizedDescription)")
+                        }
+                        else if let url = url
+                        {
+                            // Append retrieved download URL to the array
+                            let urlString = url.absoluteString //This may not be needed I just added it
+                            self.retrievedImageURLs.append(url.absoluteString)
+                            
+                            // Check if all image URLs are retrieved
+                            if self.retrievedImageURLs.count == self.imageList.count
+                            {
+                                // All image URLs are retrieved, do something with retrievedImageURLs array
+                                print("All image URLs retrieved: \(self.retrievedImageURLs)")
+                                
+                                // Now you have an array of image URLs to work with
+                                // You can use these URLs to load images asynchronously
+                                DispatchQueue.main.async
+                                {
+                                    //self.imageView.image = image
+                                    let currentImage = ImageData(fImage: image, fName: imageName)
+                                    self.photosAndNamesList.append(currentImage)
+                                }
+                                
+                                //Save a url to a users device (we have to save the whole list)
+                                //UserDefaults.standard.set(urlString, forKey: "url")
+                            }
+                        }
+                    } //end of downloadURL
                 
-                let urlString = url.absoluteString
-                
-                //Refresh image only once, after uploading
-                DispatchQueue.main.async
-                {
-                    self.imageView.image = image
-                }
-                
-                print("Download URL: \(urlString)")
-                UserDefaults.standard.set(urlString, forKey: "url")
-            })
-        })
+                } // end of for loop
+        }) // end of storage.child
         
         
         //----------------We store the imageList in the database as a .txt file---------------

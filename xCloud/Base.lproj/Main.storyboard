@@ -322,6 +322,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="Zdu-Cu-0MO" id="zbb-sp-pl2"/>
+                                    <outlet property="delegate" destination="Zdu-Cu-0MO" id="tuo-Am-kgv"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AM7-o0-8uT"/>
