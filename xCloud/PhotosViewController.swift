@@ -41,6 +41,10 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
 
     var urlString = ""
     
+    //Dictionaries
+    var urlDictionary = [String: String]()
+    var imageDictionary = [String: UIImage]()
+    
     //----------------------- View Did Load -----------------------
     override func viewDidLoad()
     {
@@ -156,7 +160,11 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                 let image = self.retrievedUIImagesList[index] // Assuming you have UIImages here
                 let urlString = self.retrievedImageURLs[index]
 
-                let currentImage = ImageData(fImage: image, fName: imageName, fURL: urlString)
+                //let currentImage = ImageData(fImage: image, fName: imageName, fURL: urlString)
+
+                
+                let currentImage = ImageData(fImage: imageDictionary[imageName]!, fName: imageName, fURL: urlDictionary[imageName]!)
+                
                 self.photosDataList.append(currentImage)
                 print("PhotosDataList updated.")
                 
@@ -194,6 +202,19 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     // Split the retrieved string into an array of strings
                     imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
                     
+                    let placeholderImage = UIImage(named: "placeholderImage")
+                    
+                    //ADDING TO DICTIONARY
+                    for name in imageList {
+                        self.urlDictionary[name] = ""
+                        self.imageDictionary[name] = UIImage()
+                    }
+                    
+                    print("imageDictionary: \(self.imageDictionary)")
+                    
+                    print("testurl: \(self.urlDictionary)")
+                    print("testimages: \(self.imageDictionary)")
+                    
                     self.retrievedimageList = imageList // update retrievedimageList
                     print("Retrieved all image names from imageList: \(self.retrievedimageList)")
                     print("Updated retrievedimageList.")
@@ -201,7 +222,6 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     //------------------Retrieve urls and images-----------------
                     for imageName in imageList
                     {
-                        print("Retrieving URL and IMAGE for: \(imageName)...")
                         let imageRef = self.storage.child("images/" + imageName) //name of the image we will retrieve
                         
                             // ------------------Fetch download URL for each image------------------
@@ -215,13 +235,29 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                     
                                     self.retrievedImageURLs.append(url.absoluteString)
                                     
+                                    //-------------------
+                                    if self.urlDictionary.keys.contains(imageName)
+                                    {
+                                        self.urlDictionary[imageName] = url.absoluteString
+                                    }
+                                    
+                                    //-------------------
+                                    
+                                    print("Retrieving URL and IMAGE for: \(imageName)...")
+                                    print("Image url: \(url.absoluteString)")
+                                    print("")
+                                    
+                                    
+                                    
                                     // Check if all image URLs are retrieved
+                                    //if self.retrievedImageURLs.count == imageList.count
                                     if self.retrievedImageURLs.count == imageList.count
                                     {
                                         // All image URLs are retrieved, do something with retrievedImageURLs array
                                         // Now you have an array of image URLs to work with
                                         // You can use these URLs to load images asynchronously
                                         print("All image URLs retrieved: \(self.retrievedImageURLs)")
+                                        print("urlDictionary: \(self.urlDictionary)")
                                         
                                     }
                                     
@@ -235,13 +271,22 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                             if let imageData = data, let image = UIImage(data: imageData)
                                             {
                                                 // Append retrieved image to the array
-                                                self.self.retrievedUIImagesList.append(image)
-                                            
+                                                self.retrievedUIImagesList.append(image)
+                                                
+                                                //-------------------
+                                                if self.imageDictionary.keys.contains(imageName)
+                                                {
+                                                    self.imageDictionary[imageName] = image
+                                                }
+                                                
+                                                //-------------------
+                                                
                                                 // Check if all images are retrieved
                                                 if self.retrievedUIImagesList.count == imageList.count
                                                 {
                                                     // All images are retrieved, do something with retrievedImages array
                                                     print("All images retrieved: \(self.retrievedUIImagesList)")
+                                                    print("imagesDictionary: \(self.imageDictionary)")
                                                     self.addToPhotoDataList()
                                                 
                                                 } // end of if
