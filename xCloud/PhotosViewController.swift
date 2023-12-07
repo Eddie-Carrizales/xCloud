@@ -157,12 +157,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
             for index in 0..<self.retrievedimageList.count
             {
                 let imageName = self.retrievedimageList[index]
-                let image = self.retrievedUIImagesList[index] // Assuming you have UIImages here
-                let urlString = self.retrievedImageURLs[index]
 
-                //let currentImage = ImageData(fImage: image, fName: imageName, fURL: urlString)
-
-                
                 let currentImage = ImageData(fImage: imageDictionary[imageName]!, fName: imageName, fURL: urlDictionary[imageName]!)
                 
                 self.photosDataList.append(currentImage)
@@ -210,10 +205,8 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                         self.imageDictionary[name] = UIImage()
                     }
                     
-                    print("imageDictionary: \(self.imageDictionary)")
-                    
-                    print("testurl: \(self.urlDictionary)")
-                    print("testimages: \(self.imageDictionary)")
+                    //print("urlDictionary: \(self.urlDictionary)")
+                    //print("imageDictionary: \(self.imageDictionary)")
                     
                     self.retrievedimageList = imageList // update retrievedimageList
                     print("Retrieved all image names from imageList: \(self.retrievedimageList)")
@@ -231,23 +224,18 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                 }
                                 else if let url = url
                                 {
-                                    // Append retrieved download URL to the array
-                                    
+                                    // Append retrieved download URL to the array so we can check later if everything was downloaded
                                     self.retrievedImageURLs.append(url.absoluteString)
                                     
-                                    //-------------------
+                                    //Match the downloaded url to the image name
                                     if self.urlDictionary.keys.contains(imageName)
                                     {
                                         self.urlDictionary[imageName] = url.absoluteString
                                     }
                                     
-                                    //-------------------
-                                    
                                     print("Retrieving URL and IMAGE for: \(imageName)...")
-                                    print("Image url: \(url.absoluteString)")
-                                    print("")
-                                    
-                                    
+                                    //print("Image url: \(url.absoluteString)")
+                                    //print("")
                                     
                                     // Check if all image URLs are retrieved
                                     //if self.retrievedImageURLs.count == imageList.count
@@ -270,16 +258,14 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                         {
                                             if let imageData = data, let image = UIImage(data: imageData)
                                             {
-                                                // Append retrieved image to the array
+                                                // Append retrieved image to the array so we can check later if everything was downloaded
                                                 self.retrievedUIImagesList.append(image)
                                                 
-                                                //-------------------
+                                                //Match the downloaded image to the image name
                                                 if self.imageDictionary.keys.contains(imageName)
                                                 {
                                                     self.imageDictionary[imageName] = image
                                                 }
-                                                
-                                                //-------------------
                                                 
                                                 // Check if all images are retrieved
                                                 if self.retrievedUIImagesList.count == imageList.count
@@ -372,7 +358,10 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     return
                 }
                 print("File uploaded successfully! Metadata: \(metadata)")
+                
+                //------------------Retrieve imageList, new url and image and update photosDataList-----------------
                 self.retriveNewImageInformation()
+                print("PhotosDataList updated by imagePickerController.")
             }
         }
     } // end of function storeImageListAsTxt
@@ -416,15 +405,9 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         print("Image Picker Uploaded the picked image.")
         
         
-        //----------------We store the imageList in the database as a .txt file and Retrieve---------------
+        //----------------We store the imageList in the database as a .txt file and Retrieve information---------------
         storeImageListAsTxt(updatedImageList: retrievedimageList) // This stores imageList and retrieves
         //print("Image Picker Controller updated imageList.txt")
-        
-        //------------------Retrieve imageList, new url and image and update photosDataList-----------------
-        // NOTE: I WILL REDOWNLOAD EVERYTHING AGAIN (IMAGELIST, URLS and IMAGE), HOWEVER THE WAY IT SHOULD BE DONE IS TO DOWNLOAD ONLY THE NEW URL AND NEW IMAGE THAT WAS JUST UPLOADED, AND ADD THAT TO THE CORRESPONDING LISTS (URL LIST, IMAGE LIST, AND PHOTO DATA LIST)
-        //retrieveImagesInformation()
-        //print("PhotosDataList updated by imagePickerController.")
-        
         
     } // end of function pickerController
     
