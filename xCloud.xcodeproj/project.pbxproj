@@ -22,6 +22,9 @@
 		E8DC9A212AEA3028002BFDC5 /* MyDriveController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A202AEA3028002BFDC5 /* MyDriveController.swift */; };
 		E8DC9A252AEA3567002BFDC5 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */; };
 		E8DC9A412AEA442E002BFDC5 /* RootTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DC9A402AEA442E002BFDC5 /* RootTableViewController.swift */; };
+		E8E4E95D2B223C920034F2B9 /* FilesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E95C2B223C920034F2B9 /* FilesCollectionViewCell.swift */; };
+		E8E4E95F2B223CCC0034F2B9 /* FilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */; };
+		E8E4E9612B223D5C0034F2B9 /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9602B223D5C0034F2B9 /* FileData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +41,9 @@
 		E8DC9A202AEA3028002BFDC5 /* MyDriveController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDriveController.swift; sourceTree = "<group>"; };
 		E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		E8DC9A402AEA442E002BFDC5 /* RootTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTableViewController.swift; sourceTree = "<group>"; };
+		E8E4E95C2B223C920034F2B9 /* FilesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesCollectionViewCell.swift; sourceTree = "<group>"; };
+		E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesViewController.swift; sourceTree = "<group>"; };
+		E8E4E9602B223D5C0034F2B9 /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,9 @@
 				E8DC9A032AEA1728002BFDC5 /* SceneDelegate.swift */,
 				E8DC9A402AEA442E002BFDC5 /* RootTableViewController.swift */,
 				E8DC9A202AEA3028002BFDC5 /* MyDriveController.swift */,
+				E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */,
+				E8E4E95C2B223C920034F2B9 /* FilesCollectionViewCell.swift */,
+				E8E4E9602B223D5C0034F2B9 /* FileData.swift */,
 				E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */,
 				E83CF3E02B20130800D3E486 /* PhotosCollectionViewCell.swift */,
 				E83CF3E22B20165800D3E486 /* ImageData.swift */,
@@ -173,11 +182,14 @@
 			files = (
 				E8DC9A022AEA1728002BFDC5 /* AppDelegate.swift in Sources */,
 				E8DC9A412AEA442E002BFDC5 /* RootTableViewController.swift in Sources */,
+				E8E4E95D2B223C920034F2B9 /* FilesCollectionViewCell.swift in Sources */,
 				E8DC9A212AEA3028002BFDC5 /* MyDriveController.swift in Sources */,
 				E8DC9A042AEA1728002BFDC5 /* SceneDelegate.swift in Sources */,
 				E8DC9A252AEA3567002BFDC5 /* PhotosViewController.swift in Sources */,
 				E83CF3E12B20130800D3E486 /* PhotosCollectionViewCell.swift in Sources */,
+				E8E4E95F2B223CCC0034F2B9 /* FilesViewController.swift in Sources */,
 				E83CF3E32B20165800D3E486 /* ImageData.swift in Sources */,
+				E8E4E9612B223D5C0034F2B9 /* FileData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
