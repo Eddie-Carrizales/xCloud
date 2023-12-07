@@ -197,8 +197,6 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     // Split the retrieved string into an array of strings
                     imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
                     
-                    let placeholderImage = UIImage(named: "placeholderImage")
-                    
                     //ADDING TO DICTIONARY
                     for name in imageList {
                         self.urlDictionary[name] = ""
