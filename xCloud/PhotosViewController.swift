@@ -52,6 +52,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
+        configureSearchController()
         
         //Fetch the data from the database to show it in the controller
         //Steps:
