@@ -25,6 +25,7 @@
 		E8E4E95D2B223C920034F2B9 /* FilesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E95C2B223C920034F2B9 /* FilesCollectionViewCell.swift */; };
 		E8E4E95F2B223CCC0034F2B9 /* FilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */; };
 		E8E4E9612B223D5C0034F2B9 /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9602B223D5C0034F2B9 /* FileData.swift */; };
+		E8E4E9632B227E270034F2B9 /* PhotosCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9622B227E270034F2B9 /* PhotosCellViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		E8E4E95C2B223C920034F2B9 /* FilesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesCollectionViewCell.swift; sourceTree = "<group>"; };
 		E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesViewController.swift; sourceTree = "<group>"; };
 		E8E4E9602B223D5C0034F2B9 /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
+		E8E4E9622B227E270034F2B9 /* PhotosCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCellViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				E8E4E9602B223D5C0034F2B9 /* FileData.swift */,
 				E8DC9A242AEA3567002BFDC5 /* PhotosViewController.swift */,
 				E83CF3E02B20130800D3E486 /* PhotosCollectionViewCell.swift */,
+				E8E4E9622B227E270034F2B9 /* PhotosCellViewController.swift */,
 				E83CF3E22B20165800D3E486 /* ImageData.swift */,
 				E8DC9A072AEA1728002BFDC5 /* Main.storyboard */,
 				E8DC9A0A2AEA1729002BFDC5 /* Assets.xcassets */,
@@ -184,6 +187,7 @@
 				E8DC9A412AEA442E002BFDC5 /* RootTableViewController.swift in Sources */,
 				E8E4E95D2B223C920034F2B9 /* FilesCollectionViewCell.swift in Sources */,
 				E8DC9A212AEA3028002BFDC5 /* MyDriveController.swift in Sources */,
+				E8E4E9632B227E270034F2B9 /* PhotosCellViewController.swift in Sources */,
 				E8DC9A042AEA1728002BFDC5 /* SceneDelegate.swift in Sources */,
 				E8DC9A252AEA3567002BFDC5 /* PhotosViewController.swift in Sources */,
 				E83CF3E12B20130800D3E486 /* PhotosCollectionViewCell.swift in Sources */,

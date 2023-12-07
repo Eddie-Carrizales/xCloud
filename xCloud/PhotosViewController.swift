@@ -415,11 +415,36 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     {
         picker.dismiss(animated: true, completion: nil)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowAnotherViewController",
+           let destinationViewController = segue.destination as? PhotosCellViewController,
+           let indexPath = sender as? IndexPath {
+            
+            print("IN SEGUE")
+            
+            let selectedImage = photosDataList[indexPath.row].photoImage
+            let labelText = photosDataList[indexPath.row].photoName
+            //let stringList = // Get the list of strings based on indexPath or cell data
+            
+            print("labelText: \(labelText)")
+            
+            destinationViewController.receivedImage = selectedImage
+            destinationViewController.receivedLabelText = labelText
+            //destinationViewController.receivedStringList = stringList
+        }
+    }
+    
 } // end of class
 
 
 extension PhotosViewController: UICollectionViewDelegate, UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate
 {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("PERFORMING SEGUE")
+        performSegue(withIdentifier: "ShowAnotherViewController", sender: indexPath)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if searching {
             return searchedImage.count
@@ -435,12 +460,12 @@ extension PhotosViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if searching
         {
             cell.imageViewCell.image = searchedImage[indexPath.row].photoImage
-            cell.labelCell.text = searchedImage[indexPath.row].photoName
+            //cell.labelCell.text = searchedImage[indexPath.row].photoName
         }
         else
         {
             cell.imageViewCell.image = photosDataList[indexPath.row].photoImage
-            cell.labelCell.text = photosDataList[indexPath.row].photoName
+            //cell.labelCell.text = photosDataList[indexPath.row].photoName
         }
         
         return cell

@@ -8,13 +8,14 @@
 import UIKit
 import FirebaseStorage
 
+
 class PhotosCollectionViewCell: UICollectionViewCell {
     
     //-----------------------Connected Outlets-----------------------
     @IBOutlet weak var imageViewCell: UIImageView!
-    @IBOutlet weak var labelCell: UILabel!
     
-}
+    
+} // end of class PhotosCollectionViewCell
 
 
 
