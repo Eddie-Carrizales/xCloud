@@ -19,22 +19,25 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     //Firebase Storage
     private let storage = Storage.storage().reference()
     
-    //List that will store the image names, to determine what we have in the database
-    var retrievedimageList = [String]()
     
     //List of type ImageData that will store the image and its name (so we can show them together on the each cell)
     var photosDataList = [ImageData]()
+    
+    //List that will store the image names, to determine what we have in the database
+    var retrievedimageList = [String]()
     
     // An array to store retrieved image URLs
     var retrievedImageURLs: [String] = []
     
     // An array to store retrieved images
-    var retrievedImages: [UIImage] = []
+    var retrievedUIImagesList: [UIImage] = []
     
     //Searching variables
     let searchController = UISearchController(searchResultsController: nil)
     var searching = false
     var searchedImage = [ImageData]()
+    
+    var newImageName: String?
 
     var urlString = ""
     
@@ -50,6 +53,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         //Steps:
         //1: Fetch the imageList, the urls and imageData
         retrieveImagesInformation()
+        print("VIEW DID LOAD.")
         
         //2. if the user clicks on the imagePicker, then we check last name on our image list we had already fetched, and we create a new name and we upload that name to the database (the picture we pick will also be uploaded to the database with that new name)
         //This step is done in imagePickerController function
@@ -85,6 +89,20 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         searchController.searchBar.placeholder = "Search content in photos or by name"
     }
     
+    func extractDigits(from input: String) -> String {
+        let pattern = #"_([0-9]+)\."#
+
+        if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+            if let match = regex.firstMatch(in: input, options: [], range: NSRange(input.startIndex..., in: input)) {
+                let range = Range(match.range(at: 1), in: input)!
+                let digits = String(input[range])
+                return digits
+            }
+        }
+
+        return ""
+    }
+    
     //This function will parse the imageList that was retrieved so we know what name to give to the new image that we will add to the databse
     func givePickedImageName(retrievedimageList: [String]) -> [String]
     {
@@ -92,42 +110,62 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         imageListTemp = retrievedimageList //add what we already have (we have to do this because we cannot mutate retrievedimageList directly since its passed)
         
         var imageName: String?
-        
+        print("imageListTemp: \(imageListTemp)")
         //gets the number from the last image in the imageList
         if let lastImage = imageListTemp.last
         {
-            if let range = lastImage.range(of: "_")
+            
+            let digitsAfterUnderscore = extractDigits(from: lastImage)
+            // Attempt to convert the substring to an integer
+            if let imageNumber = Int(digitsAfterUnderscore)
             {
-                let digitsAfterUnderscore = lastImage[range.upperBound...]
-                
-                // Attempt to convert the substring to an integer
-                if let imageNumber = Int(digitsAfterUnderscore)
-                {
-                    print("Current image number: \(imageNumber)")
+                // Add 1 to the extracted number
+                let newImageNumber = imageNumber + 1
                     
-                    // Add 1 to the extracted number
-                    let newImageNumber = imageNumber + 1
+                imageName = "IMAGE_" + String(newImageNumber) + ".png"
+                print("New Photo Name: " + imageName!)
+                newImageName = imageName
                     
-                    imageName = "IMAGE_" + String(newImageNumber) + ".png"
-                    print("Current Photo Name: " + imageName!)
-                    
-                    // Append the new image name to the list
-                    imageListTemp.append(imageName!)
-                }
-                else
-                {
-                    // Handle the case where the substring after underscore is not convertible to an integer
-                    print("Error: Unable to extract a valid number from the image name.")
-                }
+                // Append the new image name to the list
+                imageListTemp.append(imageName!)
             }
             else
             {
-                // Handle the case where there's no underscore in the image name
-                print("Error: Underscore not found in the image name.")
+                // Handle the case where the substring after underscore is not convertible to an integer
+                print("Error: Unable to extract a valid number from the image name.")
             }
         }
         return imageListTemp
     } // end of function givePickedImageName
+    
+    func addToPhotoDataList()
+    {
+        // Ensure the lists are of the same count and non-empty before processing
+        print("List Counts:")
+        print("retrievedimageList count: \(self.retrievedimageList.count)")
+        print("retrievedUIImagesList count: \(self.retrievedUIImagesList.count)")
+        print("retrievedImageURLs count: \(self.retrievedImageURLs.count)")
+        
+        print("URLs retrieved: \(self.retrievedImageURLs)")
+        
+        if (self.retrievedimageList.count == self.retrievedUIImagesList.count && self.retrievedimageList.count == self.retrievedImageURLs.count && !self.retrievedimageList.isEmpty)
+        {
+            for index in 0..<self.retrievedimageList.count
+            {
+                let imageName = self.retrievedimageList[index]
+                let image = self.retrievedUIImagesList[index] // Assuming you have UIImages here
+                let urlString = self.retrievedImageURLs[index]
+
+                let currentImage = ImageData(fImage: image, fName: imageName, fURL: urlString)
+                self.photosDataList.append(currentImage)
+                print("PhotosDataList updated.")
+                
+                //Reload the view controller with the new image that was now added to the database.
+                self.photosCollectionView.reloadData()
+                
+            }
+        }
+    }
     
     //This function will retreive all the imageURLS from the database using the list of image names
     func retrieveImagesInformation()
@@ -166,7 +204,6 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                         print("Retrieving URL and IMAGE for: \(imageName)...")
                         let imageRef = self.storage.child("images/" + imageName) //name of the image we will retrieve
                         
-                        
                             // ------------------Fetch download URL for each image------------------
                             imageRef.downloadURL { url, error in
                                 if let error = error {
@@ -175,6 +212,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                 else if let url = url
                                 {
                                     // Append retrieved download URL to the array
+                                    
                                     self.retrievedImageURLs.append(url.absoluteString)
                                     
                                     // Check if all image URLs are retrieved
@@ -184,39 +222,35 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                         // Now you have an array of image URLs to work with
                                         // You can use these URLs to load images asynchronously
                                         print("All image URLs retrieved: \(self.retrievedImageURLs)")
+                                        
                                     }
+                                    
+                                    // ------------------ Download image data ------------------
+                                    imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                                        if let error = error {
+                                            print("Error downloading \(imageName): \(error.localizedDescription)")
+                                        }
+                                        else
+                                        {
+                                            if let imageData = data, let image = UIImage(data: imageData)
+                                            {
+                                                // Append retrieved image to the array
+                                                self.self.retrievedUIImagesList.append(image)
+                                            
+                                                // Check if all images are retrieved
+                                                if self.retrievedUIImagesList.count == imageList.count
+                                                {
+                                                    // All images are retrieved, do something with retrievedImages array
+                                                    print("All images retrieved: \(self.retrievedUIImagesList)")
+                                                    self.addToPhotoDataList()
+                                                
+                                                } // end of if
+                                            }
+                                        }
+                                    } // end of download image data
                                 }
                             } //end of downloadURL
-                        
-                            // ------------------ Download image data ------------------
-                            imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                                if let error = error {
-                                    print("Error downloading \(imageName): \(error.localizedDescription)")
-                                }
-                                else
-                                {
-                                    if let imageData = data, let image = UIImage(data: imageData)
-                                    {
-                                        
-                                        // Append retrieved image to the array
-                                        self.retrievedImages.append(image)
-                                    
-                                        // Check if all images are retrieved
-                                        if self.retrievedImages.count == imageList.count
-                                        {
-                                            // All images are retrieved, do something with retrievedImages array
-                                            print("All images retrieved: \(self.retrievedImages)")
-                                            self.photosCollectionView.reloadData()
-                                        
-                                        }
-                                        
-                                        //--------------Append Image, Name, and URL retrieved-----------
-                                        //self.imageView.image = image
-                                        let currentImage = ImageData(fImage: image, fName: imageName, fURL: self.urlString)
-                                        self.photosDataList.append(currentImage)
-                                    }
-                                }
-                            } // end of download image data
+            
                     } // end of for loop
                     
                 } // end of second if
@@ -224,6 +258,56 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         } // end of download ImageList file
         
     } // end of retrieveImageUrlsAndData
+    
+    func retriveNewImageInformation()
+    {
+        //------------------Retrieve urls and images-----------------
+        print("Retrieving URL and IMAGE for: \(String(describing: self.newImageName))...")
+        let imageRef = self.storage.child("images/" + self.newImageName!) //name of the image we will retrieve
+                        
+        // ------------------Fetch download URL for each image------------------
+        imageRef.downloadURL
+        { url, error in
+            if let error = error
+            {
+                print("Error fetching URL for \(String(describing: self.newImageName)): \(error.localizedDescription)")
+            }
+            else if let url = url
+            {
+                // retrieved download URL
+                                    
+                let newImageUrl = url.absoluteString
+                                    
+                                    
+                // ------------------ Download image data ------------------
+                imageRef.getData(maxSize: 10 * 1024 * 1024)
+                { data, error in
+                    if let error = error
+                    {
+                        print("Error downloading \(String(describing: self.newImageName)): \(error.localizedDescription)")
+                    }
+                    else
+                    {
+                        if let imageData = data, let image = UIImage(data: imageData)
+                        {
+                            // retrieved image
+                            let newImage = image
+                                            
+                            // update photosDataList
+                            let newImageData = ImageData(fImage: newImage, fName: self.newImageName!, fURL: newImageUrl)
+                            self.photosDataList.append(newImageData)
+                            print("PhotosDataList updated.")
+                            
+                            //Reload the view controller with the new image that was now added to the database.
+                            self.photosCollectionView.reloadData()
+                                                
+                        } // end of if
+                    }
+                }
+            } //end of first if
+        } // end of download ImageList file
+        
+    } // end of retriveNewImageInformation
     
     //This function stores the imageList as a txt file in the database
     func storeImageListAsTxt(updatedImageList: [String])
@@ -243,6 +327,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     return
                 }
                 print("File uploaded successfully! Metadata: \(metadata)")
+                self.retriveNewImageInformation()
             }
         }
     } // end of function storeImageListAsTxt
@@ -251,6 +336,8 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     //Function that will call the imagePickerController allowing a user to pick an image
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
     {
+        print("Image Picker Controller Was Called.")
+        
         picker.dismiss(animated: true, completion: nil)
         //Create a variable type image that will be chosen from the image picker controller
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else
@@ -264,16 +351,16 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
         
         //---Checking list so we know what the current image name is and adding a new image name to the list---
-        var updatedImageList = [String]() // variable to store newly updated image list
+        //var updatedImageList = [String]() // variable to store newly updated image list
         
-        updatedImageList = givePickedImageName(retrievedimageList: retrievedimageList)
+        retrievedimageList = givePickedImageName(retrievedimageList: retrievedimageList)
         print("ImagePickerController updated retrievedImageList.")
-        print("New retrieved image list: \(updatedImageList) ")
+        print("New retrieved image list: \(retrievedimageList) ")
         
         
         //------Putting the image chosen from the imagePickerController into the storage address-----
         //We access the last element of the updatedImageList which has the newly created name for our image
-        storage.child("images/" + updatedImageList[updatedImageList.count - 1]).putData(imageAsData, metadata: nil , completion:
+        storage.child("images/" + retrievedimageList[retrievedimageList.count - 1]).putData(imageAsData, metadata: nil , completion:
         { _, error in
             guard error == nil else
             {
@@ -281,21 +368,18 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                 return
             }
         }) // end of storage.child
+        print("Image Picker Uploaded the picked image.")
         
         
-        //----------------We store the imageList in the database as a .txt file---------------
-        storeImageListAsTxt(updatedImageList: updatedImageList)
-        print("Image Picker Controller updated imageList.txt")
+        //----------------We store the imageList in the database as a .txt file and Retrieve---------------
+        storeImageListAsTxt(updatedImageList: retrievedimageList) // This stores imageList and retrieves
+        //print("Image Picker Controller updated imageList.txt")
         
         //------------------Retrieve imageList, new url and image and update photosDataList-----------------
         // NOTE: I WILL REDOWNLOAD EVERYTHING AGAIN (IMAGELIST, URLS and IMAGE), HOWEVER THE WAY IT SHOULD BE DONE IS TO DOWNLOAD ONLY THE NEW URL AND NEW IMAGE THAT WAS JUST UPLOADED, AND ADD THAT TO THE CORRESPONDING LISTS (URL LIST, IMAGE LIST, AND PHOTO DATA LIST)
-        retrieveImagesInformation()
-        print("PhotosDataList updated by imagePickerController.")
-        print("Updated Photos Data List: \(photosDataList)")
+        //retrieveImagesInformation()
+        //print("PhotosDataList updated by imagePickerController.")
         
-        
-        //Reload the view controller with the new image that was now added to the database.
-        self.photosCollectionView.reloadData()
         
     } // end of function pickerController
     
