@@ -38,8 +38,6 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
 
     var urlString = ""
     
-    var hasRetrievedImageList = false
-    
     //----------------------- View Did Load -----------------------
     override func viewDidLoad()
     {
@@ -48,34 +46,17 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
         
-        
         //Fetch the data from the database to show it in the controller
         //Steps:
-        //1: Fetch the imageList
-        retrievedimageList = retrieveImageList()
-        print("Retrieved Image Names from Database: \(retrievedimageList)")
+        //1: Fetch the imageList, the urls and imageData
+        retrieveImagesInformation()
         
-        //2: if the retrievedimageList was empty, do nothing and show nothing.
-        //   else, Using the retrievedimageList, we fetch the urls and imageData
-        if (retrievedimageList.count == 0)
-        {
-            print("Image list is empty, nothing will be loaded to the collection view.")
-        }
-        else
-        {
-            retrieveImagesUrlsAndData(imageList: retrievedimageList) //This will also update global variable photosDataList
-            print("Image list is not empty, urls and image data downloaded, PhotosDataList updated.")
-            print("Photos Data List: \(photosDataList)")
-        }
-        
-        //3. if the user clicks on the imagePicker, then we check last name on our image list we had already fetched, and we create a new name and we upload that name to the database (the picture we pick will also be uploaded to the database with that new name)
+        //2. if the user clicks on the imagePicker, then we check last name on our image list we had already fetched, and we create a new name and we upload that name to the database (the picture we pick will also be uploaded to the database with that new name)
         //This step is done in imagePickerController function
         
         
-        //4. After adding that name to the database, we want to fetch the urls and imageData again from the data and re-download because now there is a new name and a new image.
+        //3. After adding that name to the database, we want to fetch the urls and imageData again from the data and re-download because now there is a new name and a new image.
         //This step is done in imagePickerController function
-        
-        photosCollectionView.reloadData()
     }
     
     //----------------------- Action Functions -----------------------
@@ -103,39 +84,6 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         definesPresentationContext = true
         searchController.searchBar.placeholder = "Search content in photos or by name"
     }
-    
-    //Function used to retrieve the string names list of images from the database
-    func retrieveImageList() -> [String]
-    {
-        var imageList = [String]()
-        
-        // Reference to the file in Firebase Storage
-        let imageListRef = storage.child("index/imageList.txt")
-
-        // Download the imageList file
-        imageListRef.getData(maxSize: 1 * 1024 * 1024)
-        { data, error in
-            if let error = error
-            {
-                print("Error downloading: \(error.localizedDescription)")
-                return
-            }
-
-            if let data = data
-            {
-                // Convert the Data to a String
-                if let fileContents = String(data: data, encoding: .utf8)
-                {
-                    // Split the retrieved string into an array of strings
-                    imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
-                    print("Inside retrieveImageList function, retrieved imageList: \(imageList)")
-                }
-            }
-        }
-        
-        hasRetrievedImageList = true
-        return imageList
-    } // end of function retrieveImageList
     
     //This function will parse the imageList that was retrieved so we know what name to give to the new image that we will add to the databse
     func givePickedImageName(retrievedimageList: [String]) -> [String]
@@ -182,68 +130,99 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     } // end of function givePickedImageName
     
     //This function will retreive all the imageURLS from the database using the list of image names
-    func retrieveImagesUrlsAndData(imageList:[String])
+    func retrieveImagesInformation()
     {
         
-        //------------------Retrieve urls and images-----------------
-        for imageName in imageList
-        {
-            let imageRef = self.storage.child("images/" + imageName) //name of the image we will retrieve
-            
-            
-                // ------------------Fetch download URL for each image------------------
-                imageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("Error fetching URL for \(imageName): \(error.localizedDescription)")
-                    }
-                    else if let url = url
+        //------------------Retrieve ImageList-------------------
+        var imageList = [String]()
+        
+        // Reference to the file in Firebase Storage
+        let imageListRef = storage.child("index/imageList.txt")
+
+        // Download the imageList file
+        imageListRef.getData(maxSize: 1 * 1024 * 1024)
+        { data, error in
+            if let error = error
+            {
+                print("Error downloading: \(error.localizedDescription)")
+                return
+            }
+
+            if let data = data
+            {
+                // Convert the Data to a String
+                if let fileContents = String(data: data, encoding: .utf8)
+                {
+                    // Split the retrieved string into an array of strings
+                    imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
+                    
+                    self.retrievedimageList = imageList // update retrievedimageList
+                    print("Retrieved all image names from imageList: \(self.retrievedimageList)")
+                    print("Updated retrievedimageList.")
+        
+                    //------------------Retrieve urls and images-----------------
+                    for imageName in imageList
                     {
+                        print("Retrieving URL and IMAGE for: \(imageName)...")
+                        let imageRef = self.storage.child("images/" + imageName) //name of the image we will retrieve
                         
-                        let urlString = url.absoluteString
                         
-                        // Append retrieved download URL to the array
-                        self.retrievedImageURLs.append(self.urlString)
+                            // ------------------Fetch download URL for each image------------------
+                            imageRef.downloadURL { url, error in
+                                if let error = error {
+                                    print("Error fetching URL for \(imageName): \(error.localizedDescription)")
+                                }
+                                else if let url = url
+                                {
+                                    // Append retrieved download URL to the array
+                                    self.retrievedImageURLs.append(url.absoluteString)
+                                    
+                                    // Check if all image URLs are retrieved
+                                    if self.retrievedImageURLs.count == imageList.count
+                                    {
+                                        // All image URLs are retrieved, do something with retrievedImageURLs array
+                                        // Now you have an array of image URLs to work with
+                                        // You can use these URLs to load images asynchronously
+                                        print("All image URLs retrieved: \(self.retrievedImageURLs)")
+                                    }
+                                }
+                            } //end of downloadURL
                         
-                        // Check if all image URLs are retrieved
-                        if self.retrievedImageURLs.count == imageList.count
-                        {
-                            // All image URLs are retrieved, do something with retrievedImageURLs array
-                            // Now you have an array of image URLs to work with
-                            // You can use these URLs to load images asynchronously
-                            print("All image URLs retrieved: \(self.retrievedImageURLs)")
-                        }
-                    }
-                } //end of downloadURL
-            
-                // ------------------ Download image data ------------------
-                imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                    if let error = error {
-                        print("Error downloading \(imageName): \(error.localizedDescription)")
-                    }
-                    else
-                    {
-                        if let imageData = data, let image = UIImage(data: imageData)
-                        {
-                            
-                            // Append retrieved image to the array
-                            self.retrievedImages.append(image)
-                        
-                            // Check if all images are retrieved
-                            if self.retrievedImages.count == imageList.count
-                            {
-                                // All images are retrieved, do something with retrievedImages array
-                                print("All images retrieved: \(self.retrievedImages)")
-                            
-                            }
-                            
-                            //--------------Append Image, Name, and URL retrieved-----------
-                            //self.imageView.image = image
-                            var currentImage = ImageData(fImage: image, fName: imageName, fURL: self.urlString)
-                            self.photosDataList.append(currentImage)
-                        }
-                    }
-                } // end of download image data
-        } // end of for loop
+                            // ------------------ Download image data ------------------
+                            imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                                if let error = error {
+                                    print("Error downloading \(imageName): \(error.localizedDescription)")
+                                }
+                                else
+                                {
+                                    if let imageData = data, let image = UIImage(data: imageData)
+                                    {
+                                        
+                                        // Append retrieved image to the array
+                                        self.retrievedImages.append(image)
+                                    
+                                        // Check if all images are retrieved
+                                        if self.retrievedImages.count == imageList.count
+                                        {
+                                            // All images are retrieved, do something with retrievedImages array
+                                            print("All images retrieved: \(self.retrievedImages)")
+                                            self.photosCollectionView.reloadData()
+                                        
+                                        }
+                                        
+                                        //--------------Append Image, Name, and URL retrieved-----------
+                                        //self.imageView.image = image
+                                        let currentImage = ImageData(fImage: image, fName: imageName, fURL: self.urlString)
+                                        self.photosDataList.append(currentImage)
+                                    }
+                                }
+                            } // end of download image data
+                    } // end of for loop
+                    
+                } // end of second if
+            } //end of first if
+        } // end of download ImageList file
+        
     } // end of retrieveImageUrlsAndData
     
     //This function stores the imageList as a txt file in the database
@@ -304,20 +283,15 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         }) // end of storage.child
         
         
-        //------------------Retrieve new url and image and update photosDataList-----------------
-        // NOTE: I WILL REDOWNLOAD EVERYTHING AGAIN (URLS and IMAGE), HOWEVER THE WAY IT SHOULD BE DONE IS TO DOWNLOAD ONLY THE NEW URL AND NEW IMAGE THAT WAS JUST UPLOADED, AND ADD THAT TO THE CORRESPONDING LISTS (URL LIST, IMAGE LIST, AND PHOTO DATA LIST)
-        retrieveImagesUrlsAndData(imageList:updatedImageList)
-        print("PhotosDataList updated by imagePickerController.")
-        print("Updated Photos Data List: \(photosDataList)")
-        
-        
         //----------------We store the imageList in the database as a .txt file---------------
         storeImageListAsTxt(updatedImageList: updatedImageList)
         print("Image Picker Controller updated imageList.txt")
         
-        //----------------We "retrive" the updatedImageList from our database simply by setting our retrievedImageList equal to the updatedImageList, since updatedImageList is already the most updated list.
-        retrievedimageList = updatedImageList
-        print("Image Picker Controller uptaded retrievedimageList")
+        //------------------Retrieve imageList, new url and image and update photosDataList-----------------
+        // NOTE: I WILL REDOWNLOAD EVERYTHING AGAIN (IMAGELIST, URLS and IMAGE), HOWEVER THE WAY IT SHOULD BE DONE IS TO DOWNLOAD ONLY THE NEW URL AND NEW IMAGE THAT WAS JUST UPLOADED, AND ADD THAT TO THE CORRESPONDING LISTS (URL LIST, IMAGE LIST, AND PHOTO DATA LIST)
+        retrieveImagesInformation()
+        print("PhotosDataList updated by imagePickerController.")
+        print("Updated Photos Data List: \(photosDataList)")
         
         
         //Reload the view controller with the new image that was now added to the database.
