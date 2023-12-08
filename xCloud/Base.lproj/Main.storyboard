@@ -207,26 +207,26 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="yYR-zQ-HHC" customClass="PhotosCollectionViewCell" customModule="xCloud" customModuleProvider="target">
-                                        <rect key="frame" x="5" y="5" width="121.99999999999997" height="122"/>
+                                        <rect key="frame" x="5" y="5" width="115" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vkQ-hb-7J7">
-                                            <rect key="frame" x="0.0" y="0.0" width="121.99999999999997" height="122"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gXx-Bf-ukD">
-                                                    <rect key="frame" x="0.0" y="0.0" width="122" height="122"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
                                                     <gestureRecognizers/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="122" id="JVl-8w-SNY"/>
-                                                        <constraint firstAttribute="height" constant="122" id="q99-eV-iwM"/>
+                                                        <constraint firstAttribute="width" constant="115" id="RYf-eH-6rN"/>
+                                                        <constraint firstAttribute="height" constant="115" id="gZn-Di-R4d"/>
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="gXx-Bf-ukD" firstAttribute="leading" secondItem="vkQ-hb-7J7" secondAttribute="leading" id="RsU-IN-rbK"/>
-                                                <constraint firstAttribute="trailing" secondItem="gXx-Bf-ukD" secondAttribute="trailing" id="WCW-Cf-Ggp"/>
-                                                <constraint firstAttribute="bottom" secondItem="gXx-Bf-ukD" secondAttribute="bottom" id="XMo-eI-jO1"/>
-                                                <constraint firstItem="gXx-Bf-ukD" firstAttribute="top" secondItem="vkQ-hb-7J7" secondAttribute="top" id="ndM-iO-b96"/>
+                                                <constraint firstItem="gXx-Bf-ukD" firstAttribute="leading" secondItem="vkQ-hb-7J7" secondAttribute="leading" id="dFT-7I-FQt"/>
+                                                <constraint firstAttribute="bottom" secondItem="gXx-Bf-ukD" secondAttribute="bottom" id="pEf-sH-EsQ"/>
+                                                <constraint firstAttribute="trailing" secondItem="gXx-Bf-ukD" secondAttribute="trailing" id="u5m-Bc-sNt"/>
+                                                <constraint firstItem="gXx-Bf-ukD" firstAttribute="top" secondItem="vkQ-hb-7J7" secondAttribute="top" id="ukL-bH-7Sk"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>

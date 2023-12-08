@@ -56,7 +56,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
         configureSearchController()
-        retrieveImagesInformation() // runs only once
+        retrieveImagesInformation()
         
         //Fetch the data from the database to show it in the controller
         //Steps:
@@ -64,7 +64,21 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Create a Timer that fires every 15 seconds
         let timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { _ in
-            self.retrieveImagesInformation()
+            //clear
+//            self.photosDataList.removeAll()
+//            self.retrievedimageList.removeAll()
+//            self.retrievedImageURLs.removeAll()
+//            self.retrievedUIImagesList.removeAll()
+//            self.retrievedJsonObjectsList.removeAll()
+//            self.urlDictionary.removeAll()
+//            self.imageDictionary.removeAll()
+//            self.jsonObjectsDictionary.removeAll()
+//
+//
+//            //call again
+//            self.retrieveImagesInformation()
+            
+            self.retrieveJsonInformation()
         }
         
         // To make sure the timer fires when the program starts
@@ -188,7 +202,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     {
         
         //------------------Retrieve ImageList-------------------
-        var imageList = [String]()
+        var imageList = [""]
         
         // Reference to the file in Firebase Storage
         let imageListRef = storage.child("index/imageList.txt")
@@ -221,8 +235,9 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     //print("imageDictionary: \(self.imageDictionary)")
                     
                     self.retrievedimageList = imageList // update retrievedimageList
-                    print("Retrieved all image names from imageList: \(self.retrievedimageList)")
+                    print("\nRetrieved all image names from imageList: \(imageList)")
                     print("Updated retrievedimageList.")
+                    print("\n")
         
                     //------------------Retrieve urls and images-----------------
                     for imageName in imageList
@@ -256,98 +271,45 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                         // All image URLs are retrieved, do something with retrievedImageURLs array
                                         // Now you have an array of image URLs to work with
                                         // You can use these URLs to load images asynchronously
-                                        print("All image URLs retrieved: \(self.retrievedImageURLs)")
-                                        print("urlDictionary: \(self.urlDictionary)")
+                                        print("\nAll image URLs retrieved: \(self.retrievedImageURLs)")
+                                        print("\nurlDictionary: \(self.urlDictionary)")
                                         
                                     }
                                     
                                 // ------------------ Download image data ------------------
-                                imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-                                    if let error = error {
-                                        print("Error downloading \(imageName): \(error.localizedDescription)")
-                                    }
-                                    else
-                                    {
-                                        if let imageData = data, let image = UIImage(data: imageData)
+                                imageRef.getData(maxSize: 10 * 1024 * 1024)
+                                    { data, error in
+                                        if let error = error {
+                                            print("Error downloading \(imageName): \(error.localizedDescription)")
+                                        }
+                                        else
                                         {
-                                            // Append retrieved image to the array so we can check later if everything was downloaded
-                                            self.retrievedUIImagesList.append(image)
-                                            
-                                            //Match the downloaded image to the image name
-                                            if self.imageDictionary.keys.contains(imageName)
+                                            if let imageData = data, let image = UIImage(data: imageData)
                                             {
-                                                self.imageDictionary[imageName] = image
+                                                // Append retrieved image to the array so we can check later if everything was downloaded
+                                                self.retrievedUIImagesList.append(image)
+                                                
+                                                //Match the downloaded image to the image name
+                                                if self.imageDictionary.keys.contains(imageName)
+                                                {
+                                                    self.imageDictionary[imageName] = image
+                                                }
+                                                
+                                                // Check if all images are retrieved
+                                                if self.retrievedUIImagesList.count == imageList.count
+                                                {
+                                                    // All images are retrieved, do something with retrievedImages array
+                                                    print("\nAll images retrieved: \(self.retrievedUIImagesList)")
+                                                    print("\nimagesDictionary: \(self.imageDictionary)")
+                                                    
+                                                    // ------------update photosDataList---------
+                                                    self.addToPhotoDataList()
+                                                    
+                                                    //------------------------------------------
+                                                }
+                                                    
                                             }
-                                            
-                                            // Check if all images are retrieved
-                                            if self.retrievedUIImagesList.count == imageList.count
-                                            {
-                                                // All images are retrieved, do something with retrievedImages array
-                                                print("All images retrieved: \(self.retrievedUIImagesList)")
-                                                print("imagesDictionary: \(self.imageDictionary)")
-                                            }
                                                 
-                                                //----------------Retrieve JSON File-------------------------
-                                                
-                                                let jsonRef = self.storage.child("index/ml_status.json") //name of the json file
-                                                
-                                                jsonRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-                                                    if let error = error {
-                                                        print("Error downloading JSON file: \(error.localizedDescription)")
-                                                        return
-                                                    }
-
-                                                    // Parse the downloaded JSON data
-                                                    do {
-                                                        if let jsonData = data,
-                                                           let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-
-                                                            // Get the file names (part after the last "/")
-                                                            let fileNames = jsonDict.keys.map { $0.components(separatedBy: "/").last ?? "" }
-                                                            print("File names:", fileNames)
-                                                            
-                                                            print("jsonDict: \(jsonDict)")
-                                                            
-                                                            // Iterate through each key-value pair
-                                                            for (key, value) in jsonDict {
-                                                                if let currentImageName = key.components(separatedBy: "/").last {
-                                                                    if let objectData = value as? [String: Any],
-                                                                       let objects = objectData["objects"] as? [String] {
-                                                                        
-                                                                        print("imageName: \(imageName)")
-                                                                        print("currentImageName: \(currentImageName), objects: \(objects)")
-                                                                        
-                                                                        if currentImageName == imageName
-                                                                        {
-                                                                            self.retrievedJsonObjectsList.append(objects)
-                                                                            self.jsonObjectsDictionary[imageName] = objects
-                                                                        }
-                                                                        
-                                                                    }
-                                                                }
-                                                            } // end of for loop
-                                                            
-                                                            print("self.retrievedJsonObjectsList.count: \(self.retrievedJsonObjectsList.count)")
-                                                            print("imageList.count: \(imageList.count)")
-                                                            // Check if all images are retrieved
-                                                            if self.retrievedJsonObjectsList.count == imageList.count
-                                                            {
-                                                                
-                                                                // ------------update photosDataList---------
-                                                                
-                                                                // All images are retrieved, do something with retrievedImages array
-                                                                print("All objects retrieved: \(self.retrievedJsonObjectsList)")
-                                                                print("jsonObjectsDictionary: \(self.jsonObjectsDictionary)")
-                                                                self.addToPhotoDataList()
-                                                                //------------------------------------------
-                                                            }
-                                                        }
-                                                    } catch {
-                                                        print("Error parsing JSON: \(error.localizedDescription)")
-                                                    }
-                                                } //end of json download file
-                                                
-                                            }
                                         }
                                     } // end of download image data
                                 }
@@ -360,6 +322,92 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         } // end of download ImageList file
         
     } // end of retrieveImageUrlsAndData
+    
+    
+    func retrieveJsonInformation()
+    {
+        //------------------Retrieve ImageList-------------------
+        var imageList = [""]
+        
+        // Reference to the file in Firebase Storage
+        let imageListRef = storage.child("index/imageList.txt")
+
+        // Download the imageList file
+        imageListRef.getData(maxSize: 1 * 1024 * 1024)
+        { data, error in
+            if let error = error
+            {
+                print("Error downloading: \(error.localizedDescription)")
+                return
+            }
+            
+            if let data = data
+            {
+                // Convert the Data to a String
+                if let fileContents = String(data: data, encoding: .utf8)
+                {
+                    // Split the retrieved string into an array of strings
+                    imageList = fileContents.components(separatedBy: "\n") //imageList gets retrieved and updated by this point
+                    
+                    //------------------JSON-----------------
+                    for imageName in imageList
+                    {
+                        
+                        // Assuming self.storage is an instance of StorageReference
+                        let jsonRef = self.storage.child("index/ml_status.json") // Name of the JSON file
+                        
+                        jsonRef.getData(maxSize: 5 * 1024 * 1024) { [self] result in
+                            switch result {
+                            case .success(let data):
+                                // Parse the downloaded JSON data
+                                do {
+                                    if let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                                        let fileNames = jsonDict.keys.map { $0.components(separatedBy: "/").last ?? "" }
+                                        print("\nNames in JSON file:", fileNames)
+                                        
+                                        print("\njsonDict: \(jsonDict)")
+                                        print("\n")
+                                        
+                                        // Iterate through each key-value pair
+                                        for (key, value) in jsonDict {
+                                            if let currentImageName = key.components(separatedBy: "/").last,
+                                               let objectsData = value as? [String: Any],
+                                               let objects = objectsData["objects"] as? [String] {
+                                                
+                                                print("\nimageName: \(imageName)")
+                                                print("currentImageName: \(currentImageName), objects: \(objects)")
+                                                
+                                                if currentImageName == imageName {
+                                                    // Iterate through the photosDataList
+                                                    for (index, imageData) in self.photosDataList.enumerated() {
+                                                        if imageData.photoName == imageName {
+                                                            print("JASON UPDATING PHOTOS DATA LIST")
+                                                            print("imageName: \(imageName), Added Objects: \(objects)")
+                                                            print("PhotosDataList Before: \(photosDataList)")
+                                                            var modifiedImageData = imageData
+                                                            modifiedImageData.photoObjects = objects
+                                                            self.photosDataList[index] = modifiedImageData // Update the modified data
+                                                            print("PhotosDataList After: \(self.photosDataList)")
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch {
+                                    print("Error parsing JSON: \(error.localizedDescription)")
+                                }
+                            case .failure(let error):
+                                print("Error downloading JSON file: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    } //end of retrieveJasonInfo
+    
     
     func retriveNewImageInformation()
     {
@@ -395,56 +443,14 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                             // retrieved image
                             let newImage = image
                                             
-                            //----------------Retrieve JSON-------------------------
+                            // ------------update photosDataList---------
+                            let newImageData = ImageData(fImage: newImage, fName: self.newImageName!, fURL: newImageUrl, fObjects: ["No Objects Found"])
+                            self.photosDataList.append(newImageData)
+                            print("PhotosDataList updated.")
                             
-                            //GOING TO HAVE TO WAIT FOR PYTHON CODE TO FINISH PROCESSING BEFORE RETRIEVING
-                            //MAYBE YOU COULD JUST UPLOAD THE IMAGE AND THEN WAIT FOR THE PYTHON TO UPADTE AND RECEIVE THAT UPDATE WHEN RETRIEVING AGAIN.
-                            
-                            let jsonRef = self.storage.child("index/ml_status.json") //name of the json file
-                            
-                            // Download the JSON file
-                            jsonRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-                                if let error = error {
-                                    print("Error downloading JSON file: \(error.localizedDescription)")
-                                    return
-                                }
-                                
-                                var newImageObjects = [""]
-
-                                // Parse the downloaded JSON data
-                                do {
-                                    if let jsonData = data,
-                                       let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-
-                                        // Iterate through each key-value pair
-                                        for (key, value) in jsonDict {
-                                            if let currentImageName = key.components(separatedBy: "/").last {
-                                                if let objectData = value as? [String: Any],
-                                                   let objects = objectData["objects"] as? [String] {
-                                                    
-                                                    if currentImageName == self.newImageName
-                                                    {
-                                                        newImageObjects = objects
-                                                    }
-                                                }
-                                            }
-                                        } // end of for loop
-                                        
-                                        
-                                        // ------------update photosDataList---------
-                                        let newImageData = ImageData(fImage: newImage, fName: self.newImageName!, fURL: newImageUrl, fObjects: newImageObjects)
-                                        self.photosDataList.append(newImageData)
-                                        print("PhotosDataList updated.")
-                                        
-                                        //Reload the view controller with the new image that was now added to the database.
-                                        self.photosCollectionView.reloadData()
-                                        //------------------------------------------
-                                    }
-                                } catch {
-                                    print("Error parsing JSON: \(error.localizedDescription)")
-                                }
-                            } //end of json download file
-                            
+                            //Reload the view controller with the new image that was now added to the database.
+                            self.photosCollectionView.reloadData()
+                            //------------------------------------------
                                                 
                         } // end of if
                     }

@@ -36,7 +36,7 @@ class PhotosCellViewController: UIViewController {
             contentNameLabel.text = labelText
         }
         
-        if receivedObjectsList.count == 0
+        if receivedObjectsList.count == 0 || receivedObjectsList == [""]
         {
             contentObjectsLabel.text = "[No objects found]"
         }
