@@ -62,8 +62,8 @@
             filePath = "xCloud/PhotosViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "retrieveImagesInformation()"
             landmarkType = "7">
          </BreakpointContent>

@@ -12,10 +12,12 @@ class ImageData {
     var photoImage: UIImage
     var photoName: String
     var photoURL: String
+    var photoObjects: [String]
     
-    init(fImage: UIImage, fName: String, fURL: String) {
+    init(fImage: UIImage, fName: String, fURL: String, fObjects: [String]) {
         photoImage = fImage
         photoName = fName
         photoURL = fURL
+        photoObjects = fObjects
     }
 }
