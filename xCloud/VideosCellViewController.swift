@@ -38,7 +38,8 @@ class VideosCellViewController: UIViewController {
             player = AVPlayer(playerItem: playerItem)
 
             let playerLayer = AVPlayerLayer(player: player)
-            playerLayer.frame = videoPlayerView.bounds // Match the size of the UIView
+            playerLayer.videoGravity = .resizeAspectFill // or .resizeAspect
+            playerLayer.frame = videoPlayerView.bounds
 
             videoPlayerView.layer.addSublayer(playerLayer)
             player?.play()

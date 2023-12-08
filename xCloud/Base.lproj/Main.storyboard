@@ -49,9 +49,6 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="My Drive"/>
-                                                    <connections>
-                                                        <segue destination="UlG-bl-1NS" kind="show" id="eco-N6-AVh"/>
-                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -536,47 +533,51 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Objects in video:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqJ-Y2-apm">
-                                <rect key="frame" x="16" y="513" width="179" height="30"/>
+                                <rect key="frame" x="16" y="521" width="179" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[ball, person, trees]" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aev-Kw-zwe">
-                                <rect key="frame" x="16" y="551.66666666666663" width="181.66666666666666" height="26.333333333333371"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleAspectFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="weF-bd-a3F">
-                                <rect key="frame" x="0.0" y="103" width="393" height="266"/>
-                                <color key="backgroundColor" systemColor="separatorColor"/>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tdM-u1-Gnb">
-                                <rect key="frame" x="16" y="466" width="137.33333333333334" height="30"/>
+                                <rect key="frame" x="16" y="469" width="137.33333333333334" height="30"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[ball, person, trees]" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aev-Kw-zwe">
+                                <rect key="frame" x="16" y="559" width="181.66666666666666" height="26.333333333333371"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oUI-Lt-7Ah">
+                                <rect key="frame" x="0.0" y="103" width="393" height="338"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="338" id="hBD-Pb-j1u"/>
+                                    <constraint firstAttribute="width" constant="393" id="rUO-uL-Xqk"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="U5A-J1-0Ze"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Aev-Kw-zwe" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" constant="16" id="0VG-5I-8WG"/>
-                            <constraint firstItem="weF-bd-a3F" firstAttribute="top" secondItem="U5A-J1-0Ze" secondAttribute="top" id="1Lp-Vw-TTk"/>
-                            <constraint firstItem="U5A-J1-0Ze" firstAttribute="bottom" secondItem="Aev-Kw-zwe" secondAttribute="bottom" constant="240" id="41J-PO-rcU"/>
-                            <constraint firstItem="lqJ-Y2-apm" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" constant="16" id="5Th-Ng-A4y"/>
-                            <constraint firstItem="weF-bd-a3F" firstAttribute="trailing" secondItem="U5A-J1-0Ze" secondAttribute="trailing" id="8fT-5s-8Nk"/>
-                            <constraint firstItem="Aev-Kw-zwe" firstAttribute="top" secondItem="lqJ-Y2-apm" secondAttribute="bottom" constant="8.6699999999999999" id="Fns-GB-C9s"/>
-                            <constraint firstItem="lqJ-Y2-apm" firstAttribute="top" secondItem="tdM-u1-Gnb" secondAttribute="bottom" constant="17" id="G8B-sg-HvJ"/>
-                            <constraint firstItem="tdM-u1-Gnb" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" constant="16" id="IAS-5t-hd7"/>
-                            <constraint firstItem="weF-bd-a3F" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" id="Rcj-pi-vpP"/>
+                            <constraint firstItem="Aev-Kw-zwe" firstAttribute="top" secondItem="lqJ-Y2-apm" secondAttribute="bottom" constant="8" symbolic="YES" id="4LL-yt-sEC"/>
+                            <constraint firstItem="lqJ-Y2-apm" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" constant="16" id="4cb-TZ-8Cd"/>
+                            <constraint firstItem="tdM-u1-Gnb" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" constant="16" id="JWe-QM-uor"/>
+                            <constraint firstItem="oUI-Lt-7Ah" firstAttribute="top" secondItem="U5A-J1-0Ze" secondAttribute="top" id="dwh-mn-LnI"/>
+                            <constraint firstItem="Aev-Kw-zwe" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" constant="16" id="eqb-SK-KlV"/>
+                            <constraint firstItem="U5A-J1-0Ze" firstAttribute="trailing" secondItem="oUI-Lt-7Ah" secondAttribute="trailing" id="kzJ-Ze-xqD"/>
+                            <constraint firstItem="tdM-u1-Gnb" firstAttribute="top" secondItem="oUI-Lt-7Ah" secondAttribute="bottom" constant="28" id="m5d-7C-7NZ"/>
+                            <constraint firstItem="lqJ-Y2-apm" firstAttribute="top" secondItem="tdM-u1-Gnb" secondAttribute="bottom" constant="22" id="mQa-Vh-D6i"/>
+                            <constraint firstItem="oUI-Lt-7Ah" firstAttribute="leading" secondItem="U5A-J1-0Ze" secondAttribute="leading" id="ymm-L1-Z1U"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9u6-lZ-tea"/>
                     <connections>
                         <outlet property="contentNameLabel" destination="tdM-u1-Gnb" id="1s9-iy-H0j"/>
                         <outlet property="contentObjectsLabel" destination="Aev-Kw-zwe" id="aWJ-1b-MeK"/>
-                        <outlet property="videoPlayerView" destination="weF-bd-a3F" id="PK7-3l-anU"/>
+                        <outlet property="videoPlayerView" destination="oUI-Lt-7Ah" id="7MO-JM-WoV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qST-EL-kKe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -585,9 +586,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="separatorColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
