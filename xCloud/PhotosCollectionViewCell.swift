@@ -14,7 +14,6 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     //-----------------------Connected Outlets-----------------------
     @IBOutlet weak var imageViewCell: UIImageView!
     
-    
 } // end of class PhotosCollectionViewCell
 
 

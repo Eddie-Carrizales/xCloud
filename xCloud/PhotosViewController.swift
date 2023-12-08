@@ -63,20 +63,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         //1: Fetch the imageList, the urls and imageData
         
         // Create a Timer that fires every 15 seconds
-        let timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { _ in
-            //clear
-//            self.photosDataList.removeAll()
-//            self.retrievedimageList.removeAll()
-//            self.retrievedImageURLs.removeAll()
-//            self.retrievedUIImagesList.removeAll()
-//            self.retrievedJsonObjectsList.removeAll()
-//            self.urlDictionary.removeAll()
-//            self.imageDictionary.removeAll()
-//            self.jsonObjectsDictionary.removeAll()
-//
-//
-//            //call again
-//            self.retrieveImagesInformation()
+        let timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
             
             self.retrieveJsonInformation()
         }
@@ -384,7 +371,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                                                             print("JASON UPDATING PHOTOS DATA LIST")
                                                             print("imageName: \(imageName), Added Objects: \(objects)")
                                                             print("PhotosDataList Before: \(photosDataList)")
-                                                            var modifiedImageData = imageData
+                                                            let modifiedImageData = imageData
                                                             modifiedImageData.photoObjects = objects
                                                             self.photosDataList[index] = modifiedImageData // Update the modified data
                                                             print("PhotosDataList After: \(self.photosDataList)")
@@ -600,11 +587,23 @@ extension PhotosViewController: UICollectionViewDelegate, UICollectionViewDataSo
             searching = true
             searchedImage.removeAll()
             
+            //ADD CONDITIONS INSIDE THIS LOOP FOR SEARCH BAR
             for photo in photosDataList
             {
                 if photo.photoName.lowercased().contains(searchText.lowercased())
                 {
                     searchedImage.append(photo)
+                }
+                else
+                {
+                    //searches all objects inside photos
+                    for anObject in photo.photoObjects
+                    {
+                        if anObject.lowercased().contains(searchText.lowercased())
+                        {
+                            searchedImage.append(photo)
+                        }
+                    }
                 }
             }
         }
