@@ -26,7 +26,7 @@
             </objects>
             <point key="canvasLocation" x="-570" y="375"/>
         </scene>
-        <!--xCloud-->
+        <!--My xCloud Drive-->
         <scene sceneID="Aum-G5-YGN">
             <objects>
                 <tableViewController id="ahW-2e-IS8" customClass="RootTableViewController" customModule="xCloud" customModuleProvider="target" sceneMemberID="viewController">
@@ -107,7 +107,7 @@
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="Videos"/>
                                                     <connections>
-                                                        <segue destination="s6w-sU-km9" kind="show" id="Vr3-R5-32F"/>
+                                                        <segue destination="Sta-ys-vOc" kind="show" id="uns-9T-mUP"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -137,56 +137,11 @@
                             <outlet property="delegate" destination="ahW-2e-IS8" id="Emc-Gl-ZcI"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="xCloud" id="RKf-wB-H0O"/>
+                    <navigationItem key="navigationItem" title="My xCloud Drive" id="RKf-wB-H0O"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8F9-od-4e8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="350" y="375"/>
-        </scene>
-        <!--Videos-->
-        <scene sceneID="dsa-ih-OZa">
-            <objects>
-                <viewController id="s6w-sU-km9" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="bI6-lY-n3O">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="98z-Fk-cEP">
-                                <rect key="frame" x="16" y="147" width="361" height="618"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="q7b-p1-FiE">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ZNb-l1-h7o">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Bsq-UK-XSw">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lEq-8e-62a">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                            </subviews>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="ngb-F0-cZy"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Videos" id="Bxj-du-PZa"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="udA-yg-jS2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1218" y="1616"/>
         </scene>
         <!--My Drive-->
         <scene sceneID="DNz-LR-7VT">
@@ -488,6 +443,88 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kfw-xs-9GT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1230" y="200"/>
+        </scene>
+        <!--Photos-->
+        <scene sceneID="akE-Z6-CeB">
+            <objects>
+                <viewController id="Sta-ys-vOc" customClass="PhotosViewController" customModule="xCloud" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="psg-JZ-LTK">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QeP-ei-E6h">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="5" minimumInteritemSpacing="5" id="97o-Ee-3c9">
+                                    <size key="itemSize" width="122" height="122"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="5" minY="5" maxX="5" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="Mpi-mz-t70" customClass="PhotosCollectionViewCell" customModule="xCloud" customModuleProvider="target">
+                                        <rect key="frame" x="5" y="5" width="121.99999999999997" height="122"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="PCi-Me-VNG">
+                                            <rect key="frame" x="0.0" y="0.0" width="121.99999999999997" height="122"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UQV-nc-Oxb">
+                                                    <rect key="frame" x="0.0" y="0.0" width="122" height="122"/>
+                                                    <gestureRecognizers/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="122" id="2KT-Mh-WQh"/>
+                                                        <constraint firstAttribute="width" constant="122" id="2ux-Mi-Si9"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="UQV-nc-Oxb" secondAttribute="bottom" id="Jfi-Rl-bQc"/>
+                                                <constraint firstItem="UQV-nc-Oxb" firstAttribute="leading" secondItem="PCi-Me-VNG" secondAttribute="leading" id="SUs-sL-TeZ"/>
+                                                <constraint firstItem="UQV-nc-Oxb" firstAttribute="top" secondItem="PCi-Me-VNG" secondAttribute="top" id="fPb-Qd-k9h"/>
+                                                <constraint firstAttribute="trailing" secondItem="UQV-nc-Oxb" secondAttribute="trailing" id="pTb-gF-bid"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <connections>
+                                            <outlet property="imageViewCell" destination="UQV-nc-Oxb" id="7dD-Re-Nt0"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="Sta-ys-vOc" id="Hrb-Fe-8s2"/>
+                                    <outlet property="delegate" destination="Sta-ys-vOc" id="SdL-uT-NT5"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lsP-v9-Aj5"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="QeP-ei-E6h" firstAttribute="bottom" secondItem="lsP-v9-Aj5" secondAttribute="bottom" id="ahN-kj-CZG"/>
+                            <constraint firstItem="QeP-ei-E6h" firstAttribute="top" secondItem="lsP-v9-Aj5" secondAttribute="top" id="dYR-op-nzX"/>
+                            <constraint firstItem="QeP-ei-E6h" firstAttribute="trailing" secondItem="lsP-v9-Aj5" secondAttribute="trailing" id="j24-Nq-tes"/>
+                            <constraint firstItem="QeP-ei-E6h" firstAttribute="leading" secondItem="lsP-v9-Aj5" secondAttribute="leading" id="ocd-ib-3qk"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Photos" id="Zwa-w5-han">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="N4F-CI-hTs">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Kzs-b2-q7r">
+                                <rect key="frame" x="298" y="4.6666666666666679" width="79" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Upload"/>
+                                <connections>
+                                    <action selector="didTapUpload:" destination="Sta-ys-vOc" eventType="touchUpInside" id="7lP-7F-9t0"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="photosCollectionView" destination="QeP-ei-E6h" id="LKl-fQ-tog"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z96-Iy-XBc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1218" y="1615"/>
         </scene>
     </scenes>
     <resources>

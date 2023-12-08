@@ -56,11 +56,20 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
         configureSearchController()
+        retrieveImagesInformation() // runs only once
         
         //Fetch the data from the database to show it in the controller
         //Steps:
         //1: Fetch the imageList, the urls and imageData
-        retrieveImagesInformation()
+        
+        // Create a Timer that fires every 15 seconds
+        let timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { _ in
+            self.retrieveImagesInformation()
+        }
+        
+        // To make sure the timer fires when the program starts
+        RunLoop.main.add(timer, forMode: .common)
+        
         print("VIEW DID LOAD.")
         
         //2. if the user clicks on the imagePicker, then we check last name on our image list we had already fetched, and we create a new name and we upload that name to the database (the picture we pick will also be uploaded to the database with that new name)
@@ -387,6 +396,9 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                             let newImage = image
                                             
                             //----------------Retrieve JSON-------------------------
+                            
+                            //GOING TO HAVE TO WAIT FOR PYTHON CODE TO FINISH PROCESSING BEFORE RETRIEVING
+                            //MAYBE YOU COULD JUST UPLOAD THE IMAGE AND THEN WAIT FOR THE PYTHON TO UPADTE AND RECEIVE THAT UPDATE WHEN RETRIEVING AGAIN.
                             
                             let jsonRef = self.storage.child("index/ml_status.json") //name of the json file
                             
