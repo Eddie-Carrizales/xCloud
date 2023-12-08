@@ -48,6 +48,13 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     var imageDictionary = [String: UIImage]()
     var jsonObjectsDictionary = [String: [String]]()
     
+    // Long press gesture recognizer setup
+    lazy var longPressGesture: UILongPressGestureRecognizer = {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        gesture.minimumPressDuration = 0.5 // Adjust as needed
+        return gesture
+    }()
+    
     //----------------------- View Did Load -----------------------
     override func viewDidLoad()
     {
@@ -55,8 +62,12 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
+        
+        photosCollectionView.addGestureRecognizer(longPressGesture)
+
         configureSearchController()
         retrieveImagesInformation()
+        
         
         //Fetch the data from the database to show it in the controller
         //Steps:
@@ -81,7 +92,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         //This step is done in imagePickerController function
     }
     
-    //----------------------- Action Functions -----------------------
+    //----------------------- Action & Object Functions -----------------------
     @IBAction func didTapUpload(_ sender: UIButton)
     {
         let picker = UIImagePickerController()
@@ -90,6 +101,85 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
         picker.allowsEditing = true
         present(picker, animated: true)
     }
+    
+    // Handle long press on collection view cell
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            let touchPoint = gesture.location(in: self.photosCollectionView)
+            
+            if let indexPath = photosCollectionView.indexPathForItem(at: touchPoint) {
+                // Handle the long press on the cell here
+                showDeleteOption(indexPath: indexPath)
+            }
+        }
+    }
+    
+    // Show delete option (alert, action sheet, etc.)
+    func showDeleteOption(indexPath: IndexPath) {
+        let alertController = UIAlertController(title: "Delete Image", message: "Are you sure you want to delete this image?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            // Perform deletion logic here
+            self?.deleteImage(at: indexPath)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // Delete image at specific index path
+    func deleteImage(at indexPath: IndexPath) {
+        let imageToDelete = photosDataList[indexPath.item] // Get the image to delete from your data source
+        
+        // Find the index of the item you want to remove
+        if let indexToRemove = retrievedimageList.firstIndex(of: imageToDelete.photoName) {
+            // Remove the item at the found index
+            retrievedimageList.remove(at: indexToRemove)
+        }
+        
+        // Convert the array of strings to a single string representation
+        let combinedImageNameStrings = retrievedimageList.joined(separator: "\n")
+
+        // Convert the string to Data
+        if let data = combinedImageNameStrings.data(using: .utf8) {
+            // Create a reference to a file in Firebase Storage within the "index" folder
+            let imageListRef = storage.child("index/imageList.txt")
+
+            // ---------Upload the file data to Firebase Storage--------
+            imageListRef.putData(data, metadata: nil) { (metadata, error) in
+                guard let metadata = metadata else {
+                    print("Error uploading: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                print("File uploaded successfully! Metadata: \(metadata)")
+                
+                // --------------Remove the image from Firebase Storage-------------------
+                let storageRef = Storage.storage().reference().child("images/\(imageToDelete.photoName)") // Adjust the reference path as per your Firebase Storage structure
+                storageRef.delete { error in
+                    if let error = error {
+                        print("Error deleting image: \(error.localizedDescription)")
+                        // Handle error condition here
+                    } else {
+                        // Image deleted successfully from Firebase Storage
+                        // Now remove it from your local data source and collection view
+                        self.photosDataList.remove(at: indexPath.item)
+                        self.photosCollectionView.deleteItems(at: [indexPath])
+                        
+                        //------------------Retrieve imageList, new url and image and update photosDataList-----------------
+                        //self.retriveNewImageInformation()
+                        //print("PhotosDataList updated by imagePickerController.")
+                        
+                        self.photosCollectionView.reloadData()
+                    }
+                }
+
+            } // end of upload file to database
+        }
+    } // end of delete image function
     
     //----------------------- Other Functions -----------------------
     
