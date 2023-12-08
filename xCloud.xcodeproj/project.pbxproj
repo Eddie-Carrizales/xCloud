@@ -26,6 +26,10 @@
 		E8E4E95F2B223CCC0034F2B9 /* FilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */; };
 		E8E4E9612B223D5C0034F2B9 /* FileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9602B223D5C0034F2B9 /* FileData.swift */; };
 		E8E4E9632B227E270034F2B9 /* PhotosCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9622B227E270034F2B9 /* PhotosCellViewController.swift */; };
+		E8E4E9652B22FEDB0034F2B9 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9642B22FEDB0034F2B9 /* VideosViewController.swift */; };
+		E8E4E9672B22FEFA0034F2B9 /* VideosCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9662B22FEFA0034F2B9 /* VideosCollectionViewCell.swift */; };
+		E8E4E9692B22FF130034F2B9 /* VideosCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E9682B22FF130034F2B9 /* VideosCellViewController.swift */; };
+		E8E4E96B2B22FF250034F2B9 /* VideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E4E96A2B22FF250034F2B9 /* VideoData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +50,10 @@
 		E8E4E95E2B223CCC0034F2B9 /* FilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesViewController.swift; sourceTree = "<group>"; };
 		E8E4E9602B223D5C0034F2B9 /* FileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileData.swift; sourceTree = "<group>"; };
 		E8E4E9622B227E270034F2B9 /* PhotosCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCellViewController.swift; sourceTree = "<group>"; };
+		E8E4E9642B22FEDB0034F2B9 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
+		E8E4E9662B22FEFA0034F2B9 /* VideosCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosCollectionViewCell.swift; sourceTree = "<group>"; };
+		E8E4E9682B22FF130034F2B9 /* VideosCellViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosCellViewController.swift; sourceTree = "<group>"; };
+		E8E4E96A2B22FF250034F2B9 /* VideoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +101,10 @@
 				E83CF3E02B20130800D3E486 /* PhotosCollectionViewCell.swift */,
 				E8E4E9622B227E270034F2B9 /* PhotosCellViewController.swift */,
 				E83CF3E22B20165800D3E486 /* ImageData.swift */,
+				E8E4E9642B22FEDB0034F2B9 /* VideosViewController.swift */,
+				E8E4E9662B22FEFA0034F2B9 /* VideosCollectionViewCell.swift */,
+				E8E4E9682B22FF130034F2B9 /* VideosCellViewController.swift */,
+				E8E4E96A2B22FF250034F2B9 /* VideoData.swift */,
 				E8DC9A072AEA1728002BFDC5 /* Main.storyboard */,
 				E8DC9A0A2AEA1729002BFDC5 /* Assets.xcassets */,
 				E8DC9A0C2AEA1729002BFDC5 /* LaunchScreen.storyboard */,
@@ -184,16 +196,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8DC9A022AEA1728002BFDC5 /* AppDelegate.swift in Sources */,
+				E8E4E9672B22FEFA0034F2B9 /* VideosCollectionViewCell.swift in Sources */,
+				E8E4E9692B22FF130034F2B9 /* VideosCellViewController.swift in Sources */,
 				E8DC9A412AEA442E002BFDC5 /* RootTableViewController.swift in Sources */,
 				E8E4E95D2B223C920034F2B9 /* FilesCollectionViewCell.swift in Sources */,
 				E8DC9A212AEA3028002BFDC5 /* MyDriveController.swift in Sources */,
 				E8E4E9632B227E270034F2B9 /* PhotosCellViewController.swift in Sources */,
 				E8DC9A042AEA1728002BFDC5 /* SceneDelegate.swift in Sources */,
+				E8E4E9652B22FEDB0034F2B9 /* VideosViewController.swift in Sources */,
 				E8DC9A252AEA3567002BFDC5 /* PhotosViewController.swift in Sources */,
 				E83CF3E12B20130800D3E486 /* PhotosCollectionViewCell.swift in Sources */,
 				E8E4E95F2B223CCC0034F2B9 /* FilesViewController.swift in Sources */,
 				E83CF3E32B20165800D3E486 /* ImageData.swift in Sources */,
 				E8E4E9612B223D5C0034F2B9 /* FileData.swift in Sources */,
+				E8E4E96B2B22FF250034F2B9 /* VideoData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +359,7 @@
 				DEVELOPMENT_TEAM = 6B7NNPP56Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = xCloud/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "App requires access";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow access to upload photos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -373,6 +390,7 @@
 				DEVELOPMENT_TEAM = 6B7NNPP56Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = xCloud/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "App requires access";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow access to upload photos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

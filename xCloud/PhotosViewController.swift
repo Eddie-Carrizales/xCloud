@@ -149,7 +149,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
             // Create a reference to a file in Firebase Storage within the "index" folder
             let imageListRef = storage.child("index/imageList.txt")
 
-            // ---------Upload the file data to Firebase Storage--------
+            // Upload the file data to Firebase Storage
             imageListRef.putData(data, metadata: nil) { (metadata, error) in
                 guard let metadata = metadata else {
                     print("Error uploading: \(error?.localizedDescription ?? "Unknown error")")
@@ -170,8 +170,8 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                         self.photosCollectionView.deleteItems(at: [indexPath])
                         
                         //------------------Retrieve imageList, new url and image and update photosDataList-----------------
-                        //self.retriveNewImageInformation()
-                        //print("PhotosDataList updated by imagePickerController.")
+                        self.retriveNewImageInformation()
+                        print("PhotosDataList updated by imagePickerController.")
                         
                         self.photosCollectionView.reloadData()
                     }
