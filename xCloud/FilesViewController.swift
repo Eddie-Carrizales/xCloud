@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 import MobileCoreServices
 
 
-class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigationControllerDelegate {
+class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
     
     //-----------------------Connected Outlets-----------------------
     @IBOutlet weak var filesCollectionView: UICollectionView!
@@ -424,6 +424,25 @@ class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigat
 
 extension FilesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate
 {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("FILE CLICKED: \(indexPath.row)")
+        
+        let url = URL(string: filesDataList[indexPath.row].fileURL)
+        
+        UIApplication.shared.open(url!) // opens in safari
+        
+        //Opens to use other apps (such as pages)
+        //let documentController = UIDocumentInteractionController(url: url!)
+        //documentController.delegate = self // Set the delegate
+        //documentController.presentPreview(animated: true)
+    }
+    
+    // Implement the delegate method
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self // Return the view controller to present the preview
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if searching {
             return searchedImage.count
