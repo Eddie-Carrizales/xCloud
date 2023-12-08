@@ -26,7 +26,7 @@
             </objects>
             <point key="canvasLocation" x="-570" y="375"/>
         </scene>
-        <!--My xCloud Drive-->
+        <!--My xCloud-->
         <scene sceneID="Aum-G5-YGN">
             <objects>
                 <tableViewController id="ahW-2e-IS8" customClass="RootTableViewController" customModule="xCloud" customModuleProvider="target" sceneMemberID="viewController">
@@ -137,7 +137,7 @@
                             <outlet property="delegate" destination="ahW-2e-IS8" id="Emc-Gl-ZcI"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My xCloud Drive" id="RKf-wB-H0O"/>
+                    <navigationItem key="navigationItem" title="My xCloud" id="RKf-wB-H0O"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8F9-od-4e8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

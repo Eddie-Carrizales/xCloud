@@ -47,6 +47,16 @@ class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigat
     var fileUrlDictionary = [String: String]()
     var fileImageDictionary = [String: UIImage]()
     
+    
+    var isLongPressGesture = false // Flag to track long press
+    
+    // Long press gesture recognizer setup
+    lazy var longPressGesture: UILongPressGestureRecognizer = {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        gesture.minimumPressDuration = 0.5 // Adjust as needed
+        return gesture
+    }()
+    
     //----------------------- View Did Load -----------------------
     override func viewDidLoad()
     {
@@ -55,6 +65,7 @@ class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigat
         // Adds the search bar to our screen
         navigationItem.searchController = searchController
         configureSearchController()
+        filesCollectionView.addGestureRecognizer(longPressGesture)
         
         //Fetch the data from the database to show it in the controller
         //Steps:
@@ -70,7 +81,7 @@ class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigat
         //This step is done in imagePickerController function
     }
     
-    //----------------------- Action Functions -----------------------
+    //----------------------- Action && Objc Functions -----------------------
     @IBAction func didTapUpload(_ sender: UIButton)
     {
         let documentPicker = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF), String(kUTTypeText)], in: .import)
@@ -78,6 +89,86 @@ class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigat
         documentPicker.allowsMultipleSelection = false
         present(documentPicker, animated: true, completion: nil)
     }
+    
+    // Handle long press on collection view cell
+    @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
+        if gesture.state == .began {
+            isLongPressGesture = true
+            let touchPoint = gesture.location(in: self.filesCollectionView)
+            
+            if let indexPath = filesCollectionView.indexPathForItem(at: touchPoint) {
+                // Handle the long press on the cell here
+                showDeleteOption(indexPath: indexPath)
+            }
+        }
+    }
+    
+    // Show delete option (alert, action sheet, etc.)
+    func showDeleteOption(indexPath: IndexPath) {
+        let alertController = UIAlertController(title: "Delete File", message: "Are you sure you want to delete this file?", preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            // Perform deletion logic here
+            self?.deleteFile(at: indexPath)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // Delete image at specific index path
+    func deleteFile(at indexPath: IndexPath) {
+        let fileToDelete = filesDataList[indexPath.item] // Get the image to delete from your data source
+        
+        // Find the index of the item you want to remove
+        if let indexToRemove = retrievedfileList.firstIndex(of: fileToDelete.fileName) {
+            // Remove the item at the found index
+            retrievedfileList.remove(at: indexToRemove)
+        }
+        
+        // Convert the array of strings to a single string representation
+        let combinedImageNameStrings = retrievedfileList.joined(separator: "\n")
+
+        // Convert the string to Data
+        if let data = combinedImageNameStrings.data(using: .utf8) {
+            // Create a reference to a file in Firebase Storage within the "index" folder
+            let imageListRef = storage.child("index/fileList.txt")
+
+            // ---------Upload the file data to Firebase Storage--------
+            imageListRef.putData(data, metadata: nil) { (metadata, error) in
+                guard let metadata = metadata else {
+                    print("Error uploading: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                print("File uploaded successfully! Metadata: \(metadata)")
+                
+                // --------------Remove the image from Firebase Storage-------------------
+                let storageRef = Storage.storage().reference().child("files/\(fileToDelete.fileName)") // Adjust the reference path as per your Firebase Storage structure
+                storageRef.delete { error in
+                    if let error = error {
+                        print("Error deleting image: \(error.localizedDescription)")
+                        // Handle error condition here
+                    } else {
+                        // Image deleted successfully from Firebase Storage
+                        // Now remove it from your local data source and collection view
+                        self.filesDataList.remove(at: indexPath.item)
+                        self.filesCollectionView.deleteItems(at: [indexPath])
+                        
+                        //------------------Retrieve imageList, new url and image and update photosDataList-----------------
+                        //self.retriveNewImageInformation()
+                        //print("PhotosDataList updated by imagePickerController.")
+                        
+                        self.filesCollectionView.reloadData()
+                    }
+                }
+
+            } // end of upload file to database
+        }
+    } // end of delete image function
     
     //----------------------- Other Functions -----------------------
     
@@ -425,17 +516,20 @@ class FilesViewController: UIViewController, UIDocumentPickerDelegate, UINavigat
 extension FilesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UISearchResultsUpdating, UISearchBarDelegate
 {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("FILE CLICKED: \(indexPath.row)")
-        
-        let url = URL(string: filesDataList[indexPath.row].fileURL)
-        
-        UIApplication.shared.open(url!) // opens in safari
-        
-        //Opens to use other apps (such as pages)
-        //let documentController = UIDocumentInteractionController(url: url!)
-        //documentController.delegate = self // Set the delegate
-        //documentController.presentPreview(animated: true)
-    }
+        if !isLongPressGesture {
+            print("FILE CLICKED: \(indexPath.row)")
+            
+            let url = URL(string: filesDataList[indexPath.row].fileURL)
+            
+            UIApplication.shared.open(url!) // opens in safari
+            
+            //Opens to use other apps (such as pages)
+            //let documentController = UIDocumentInteractionController(url: url!)
+            //documentController.delegate = self // Set the delegate
+            //documentController.presentPreview(animated: true)
+        }
+        isLongPressGesture = false // Reset the flag after handling selection or long press
+    } //end of function
     
     // Implement the delegate method
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
