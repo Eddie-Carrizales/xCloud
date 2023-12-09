@@ -300,10 +300,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[ball, person, trees]" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y2N-hk-h93">
-                                <rect key="frame" x="16" y="476" width="182" height="27"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="[ball, person, trees, person, lamp, people, things]" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y2N-hk-h93">
+                                <rect key="frame" x="16" y="476" width="361" height="89"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="27" id="XOo-W3-UkV"/>
+                                    <constraint firstAttribute="height" constant="89" id="XOo-W3-UkV"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <nil key="textColor"/>
@@ -316,7 +316,7 @@
                             <constraint firstItem="TMF-gy-plD" firstAttribute="leading" secondItem="pwD-eA-RjF" secondAttribute="leading" id="57C-22-X5K"/>
                             <constraint firstItem="TMF-gy-plD" firstAttribute="top" secondItem="yYS-lz-L1h" secondAttribute="top" id="6c0-kR-Gpg"/>
                             <constraint firstItem="a1w-m2-NnE" firstAttribute="leading" secondItem="2hY-5V-dT4" secondAttribute="leading" id="C5b-Y6-ihv"/>
-                            <constraint firstItem="pwD-eA-RjF" firstAttribute="bottom" secondItem="y2N-hk-h93" secondAttribute="bottom" constant="280" id="JUf-VH-ZPl"/>
+                            <constraint firstItem="pwD-eA-RjF" firstAttribute="bottom" secondItem="y2N-hk-h93" secondAttribute="bottom" constant="218" id="JUf-VH-ZPl"/>
                             <constraint firstItem="TMF-gy-plD" firstAttribute="leading" secondItem="pwD-eA-RjF" secondAttribute="leading" id="Jpt-d4-37E"/>
                             <constraint firstItem="TMF-gy-plD" firstAttribute="top" secondItem="yYS-lz-L1h" secondAttribute="top" id="KHt-Z2-PcW"/>
                             <constraint firstItem="2hY-5V-dT4" firstAttribute="top" secondItem="a1w-m2-NnE" secondAttribute="bottom" constant="21" id="SKP-Wx-etF"/>
@@ -544,8 +544,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[ball, person, trees]" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aev-Kw-zwe">
-                                <rect key="frame" x="16" y="559" width="181.66666666666666" height="26.333333333333371"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[ball, person, trees, person, lamp, people, things, ball, person, trees, person, lamp, people, things]" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aev-Kw-zwe">
+                                <rect key="frame" x="16" y="559" width="361" height="90"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="90" id="KIG-ca-bbR"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="361" id="RgQ-oz-2mU"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="bia-gX-08c"/>
+                                    <constraint firstAttribute="width" constant="361" id="xyw-DW-8wd"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

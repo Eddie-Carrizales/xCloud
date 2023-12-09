@@ -39,7 +39,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     var searching = false
     var searchedImage = [ImageData]()
     
-    var newImageName: String?
+    var newImageName: String = ""
 
     var urlString = ""
     
@@ -232,7 +232,8 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                     
                 imageName = "IMAGE_" + String(newImageNumber) + ".png"
                 print("New Photo Name: " + imageName!)
-                newImageName = imageName
+                newImageName = imageName!
+
                     
                 // Append the new image name to the list
                 imageListTemp.append(imageName!)
@@ -490,7 +491,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
     {
         //------------------Retrieve urls and images-----------------
         print("Retrieving URL and IMAGE for: \(String(describing: self.newImageName))...")
-        let imageRef = self.storage.child("images/" + self.newImageName!) //name of the image we will retrieve
+        let imageRef = self.storage.child("images/" + self.newImageName) //name of the image we will retrieve
                         
         // ------------------Fetch download URL for each image------------------
         imageRef.downloadURL
@@ -521,7 +522,7 @@ class PhotosViewController: UIViewController, UIImagePickerControllerDelegate, U
                             let newImage = image
                                             
                             // ------------update photosDataList---------
-                            let newImageData = ImageData(fImage: newImage, fName: self.newImageName!, fURL: newImageUrl, fObjects: ["No Objects Found"])
+                            let newImageData = ImageData(fImage: newImage, fName: self.newImageName, fURL: newImageUrl, fObjects: ["No Objects Found"])
                             self.photosDataList.append(newImageData)
                             print("PhotosDataList updated.")
                             

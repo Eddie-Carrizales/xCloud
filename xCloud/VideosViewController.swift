@@ -79,13 +79,13 @@ class VideosViewController: UIViewController, UIImagePickerControllerDelegate, U
         //1: Fetch the imageList, the urls and imageData
         
         // Create a Timer that fires every 15 seconds
-        //let timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+        let timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
             
-            //self.retrieveJsonInformation()
-        //}
+            self.retrieveJsonInformation()
+        }
         
         // To make sure the timer fires when the program starts
-        //RunLoop.main.add(timer, forMode: .common)
+        RunLoop.main.add(timer, forMode: .common)
         
         print("VIEW DID LOAD.")
         
