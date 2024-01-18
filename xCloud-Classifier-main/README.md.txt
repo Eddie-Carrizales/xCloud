@@ -1,0 +1,1 @@
+The content in this folder will run locally on a computer. It will then retrieve photos and videos from Firebase and classify the objects in them. The application will retrieve these classifications automatically from Firebase.
